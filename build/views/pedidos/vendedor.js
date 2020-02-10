@@ -25,7 +25,7 @@ function getView(){
                 <div class="col-4">
                     <button class="btn btn-success" id="btnCargarProductos">
                         <i class="fal fa-cube"></i>
-                        Productos
+                        Producto
                     </button>                
                 </div>
                 <div class="col-4">
@@ -39,20 +39,10 @@ function getView(){
         },
         listado: ()=>{
             return `
-            <div class="row">
-                <div class="table-responsive">
-                    <table class="table table-responsive table-hover table-striped">
-                        <thead class="bg-trans-gradient text-white">
-                            <tr>
-                                <td>Documento</td>
-                                <td>Cliente</td>
-                                <td>Importe</td>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody id="tblListaPedidos">
-                        </tbody>
-                    </table>
+            <br>
+            <div class="row card">
+                <div class="table-responsive" id="tblListaPedidos">
+                    
                 </div>
             </div>
             `
@@ -64,12 +54,20 @@ function getView(){
 
 function addListeners(){
     let btnCargarPedidos = document.getElementById('btnCargarPedidos');
+    let btnCargarProductos = document.getElementById('btnCargarProductos');
+    let btnCargarMarcas = document.getElementById('btnCargarMarcas');
     
     let txtFechaPedido = document.getElementById('txtFechaPedido');
     let lbTotalPedidos = document.getElementById('lbTotalPedidos');
 
     txtFechaPedido.value = funciones.getFecha();
 
+    btnCargarProductos.addEventListener('click',async ()=>{
+        await api.reporteDiaProductos(GlobalCodSucursal,GlobalCodUsuario,funciones.devuelveFecha('txtFechaPedido'),'tblListaPedidos','lbTotalPedidos');
+    });
+    btnCargarMarcas.addEventListener('click',async ()=>{
+        await api.reporteDiaMarcas(GlobalCodSucursal,GlobalCodUsuario,funciones.devuelveFecha('txtFechaPedido'),'tblListaPedidos','lbTotalPedidos');
+    });
     btnCargarPedidos.addEventListener('click',async ()=>{
         await api.pedidosVendedor(GlobalCodSucursal,GlobalCodUsuario,funciones.devuelveFecha('txtFechaPedido'),'tblListaPedidos','lbTotalPedidos');
     });

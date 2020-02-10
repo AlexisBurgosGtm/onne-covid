@@ -23,7 +23,7 @@ router.get("/vendedores", async(req,res)=>{
         
     let qry =''; 
     qry = `SELECT CODVEN AS CODIGO, NOMVEN AS NOMBRE, TELEFONO, DESICONO AS TIPO FROM ME_VENDEDORES WHERE ACTIVO='SI' AND CODSUCURSAL='${sucursal}'`;     
-    console.log(qry);
+    
     
     execute.Query(res,qry);
 
@@ -35,7 +35,7 @@ router.post("/vendedores", async(req,res)=>{
         
     let qry =''; 
     qry = `SELECT CODVEN AS CODIGO, NOMVEN AS NOMBRE, TELEFONO, DESICONO AS TIPO FROM ME_VENDEDORES WHERE ACTIVO='SI' AND CODSUCURSAL='${sucursal}'`;     
-    console.log(qry);
+    
     
     execute.Query(res,qry);
 

@@ -18,23 +18,49 @@ let classNavegar = {
         divUsuario.innerText = GlobalUsuario;
         lbTipo.innerText = GlobalTipoUsuario;
 
-        
-        let strMenu ='';
 
         switch (tipousuario) {
             case 'VENDEDOR':
-                strMenu =   `
+                classNavegar.inicioVendedor();
+                break;
+
+            case 'SUPERVISOR':
+                funciones.loadScript('../views/inicio/supevisor.js','root')
+                .then(()=>{
+                    GlobalSelectedForm='INICIO';
+                    InicializarVista();
+                })          
+                break;
+            
+            case 'REPARTIDOR':
+                funciones.loadScript('../views/inicio/repartidor.js','root')
+                .then(()=>{
+                    GlobalSelectedForm='INICIO';
+                    InicializarVista();
+                })          
+                break;
+            case 'GERENTE':
+                    classNavegar.inicioGerente();                        
+                break;
+            default:
+                break;
+
+        };
+      
+    },
+    inicioVendedor : async ()=>{
+        let strMenu =   `
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorClientes">
-                                <span>Clientes</span>
+                                <span>VENDER</span>
                             </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorPedidos">
-                                <span>Ventas</span>
+                                <span>LOGRO DIA</span>
                             </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorLogro">
-                                <span>Logros</span>
+                                <span>LOGRO MES</span>
                             </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorNoticias">
-                                <span>Noticias</span>
+                                <span>NOTICIAS</span>
                             </a>
                             `
                 rootMenu.innerHTML = strMenu;
@@ -62,25 +88,9 @@ let classNavegar = {
                         classNavegar.noticias();
                     });
                 })          
-                break;
-
-            case 'SUPERVISOR':
-                funciones.loadScript('../views/inicio/supevisor.js','root')
-                .then(()=>{
-                    GlobalSelectedForm='INICIO';
-                    InicializarVista();
-                })          
-                break;
-            
-            case 'REPARTIDOR':
-                funciones.loadScript('../views/inicio/repartidor.js','root')
-                .then(()=>{
-                    GlobalSelectedForm='INICIO';
-                    InicializarVista();
-                })          
-                break;
-            case 'GERENTE':
-                    strMenu =  `
+    },
+    inicioGerente: ()=>{
+                let strMenu =  `
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteInicio">
                                 <span>Inicio</span>
                             </a>
@@ -103,7 +113,7 @@ let classNavegar = {
                      // handlers del menu
                     let btnMenuGerenteInicio = document.getElementById('btnMenuGerenteInicio');
                     btnMenuGerenteInicio.addEventListener('click',()=>{
-                        classNavegar.gerenteInicio();
+                        classNavegar.inicioGerente();
                     });
                     let btnMenuGerenteVendedores = document.getElementById('btnMenuGerenteVendedores');
                     btnMenuGerenteVendedores.addEventListener('click',()=>{
@@ -121,18 +131,11 @@ let classNavegar = {
                     btnMenuGerenteNoticias.addEventListener('click',()=>{
                         
                     });
-
-                    classNavegar.gerenteInicio();
-                        
-                break;
-            default:
-                break;
-
-        };
-
-        
-      
-      
+        funciones.loadScript('../views/gerente/inicio.js','root')
+        .then(()=>{
+            GlobalSelectedForm='GERENTE';
+            InicializarVistaGerente();
+        })
     },
     ventas: async(nit,nombre,direccion)=>{
         funciones.loadView('../views/facturacion/index.html','root')
@@ -175,13 +178,6 @@ let classNavegar = {
         .then(()=>{
             GlobalSelectedForm='NOTICIAS';
             inicializarVistaNoticias();
-        })
-    },
-    gerenteInicio: ()=>{
-        funciones.loadScript('../views/gerente/inicio.js','root')
-        .then(()=>{
-            GlobalSelectedForm='GERENTE';
-            InicializarVistaGerente();
         })
     },
     gerenteVendedores: ()=>{

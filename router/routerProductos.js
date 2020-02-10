@@ -2,7 +2,7 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
-// PPUBLICO= PRECIO, PMAYOREOA=OFERTA,PMAYOREOB=ESCALA, PMAYOREOC=ESCALA
+// PPUBLICO= PRECIO, PMAYOREOA=OFERTA,PMAYOREOB=ESCALA, PMAYOREOC=MAYORISTA
 
 // OBTIENE LOS PRECIOS DE UN PRODUCTO
 router.post('/preciosproducto',async(req,res)=>{

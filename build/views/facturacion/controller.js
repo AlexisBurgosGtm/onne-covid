@@ -21,16 +21,16 @@ async function iniciarVistaVentas(nit,nombre,direccion){
 
     document.getElementById('txtBusqueda').addEventListener('keyup',(e)=>{
         if(e.code=='Enter'){
-            fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
+            fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda','cmbTipoPrecio');
             $('#ModalBusqueda').modal('show');
         }
         if(e.code=='NumpadEnter'){
-            fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
+            fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda','cmbTipoPrecio');
             $('#ModalBusqueda').modal('show');
         }
     });
     document.getElementById('btnBuscarProducto').addEventListener('click',()=>{
-        fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda');
+        fcnBusquedaProducto('txtBusqueda','tblResultadoBusqueda','cmbTipoPrecio');
         $('#ModalBusqueda').modal('show');
     });
 
@@ -224,15 +224,23 @@ function iniciarModalCantidad(){
     })
 
 }
-async function fcnBusquedaProducto(idFiltro,idTablaResultado){
+async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
     
+    let cmbTipoPrecio = document.getElementById(idTipoPrecio);
+
     let filtro = document.getElementById(idFiltro).value;
     let tabla = document.getElementById(idTablaResultado);
     tabla.innerHTML = GlobalLoader;
 
 
     let str = ""; 
-    axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema)
+    axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema + '&tipoprecio=' + cmbTipoPrecio.value)
+    //axios.get('/ventas/buscarproducto', {
+      //  empnit:GlobalEmpnit,
+      //  filtro:filtro,
+      //  app:GlobalSistema,
+      //  tipoprecio:cmbTipoPrecio.value
+    //})
     .then((response) => {
         const data = response.data;        
         data.recordset.map((rows)=>{
@@ -267,6 +275,8 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado){
 }
 async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
     document.getElementById('tblResultadoBusqueda').innerHTML = '';
+    let cmbTipoPrecio = document.getElementById('cmbTipoPrecio');
+    
         let coddoc = document.getElementById('cmbCoddoc').value;
         try {        
             
@@ -286,7 +296,8 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
                     totalprecio:precio,
                     exento:exento,
                     usuario:GlobalUsuario,
-                    app:GlobalSistema
+                    app:GlobalSistema,
+                    tipoprecio:cmbTipoPrecio.value
                 });
 
                 var peticion = new Request('/ventas/tempventas', {
