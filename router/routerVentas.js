@@ -374,7 +374,7 @@ router.post("/pedidodetalle", async(req,res)=>{
     execute.Query(res,qry);
 });
 
-    
+
 
 //******************************* */
 // REPORTES DE VENDEDORES

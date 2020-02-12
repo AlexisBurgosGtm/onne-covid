@@ -474,6 +474,33 @@ let api = {
         });
 
     },
+    comboVendedores : (sucursal,idContainer)=>{
+        let container = document.getElementById(idContainer);
+        let str = '';
+
+        return new Promise((resolve,reject)=>{
+            axios.post('/empleados/vendedores', {
+                sucursal: sucursal,
+                user:GlobalUsuario
+            })
+            .then((response) => {
+                const data = response.data.recordset;
+                data.map((rows)=>{
+                    str = str + `<option value='${rows.CODIGO}'>
+                                    ${rows.NOMBRE}
+                                   Tel:<b class="text-danger">${rows.TELEFONO}</b>
+                                 </option>
+                                `        
+                })
+                container.innerHTML = str;
+                resolve();
+            }, (error) => {
+                funciones.AvisoError('Error en la solicitud');
+                container.innerHTML = '';
+                reject();
+            });
+        })
+    },
     gerenciaResumenSucursal: (mes,anio,idContenedor,idLbTotal)=>{
         
         let container = document.getElementById(idContenedor);
@@ -803,5 +830,101 @@ let api = {
 
         })
         
+    },
+    digitadorPedidosVendedor: async(sucursal,codven,idContenedor,idLbTotal)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+        
+        let strdata = '';
+        let totalpedidos = 0;
+        axios.post('/digitacion/pedidospendientes', {
+            app:GlobalSistema,
+            sucursal: sucursal,
+            codven:codven
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.IMPORTE);
+                    totalpedidos = totalpedidos + 1;
+                    let f = rows.FECHA.toString().replace('T00:00:00.000Z','');
+                    strdata = strdata + `
+                            <tr>
+                                <td>${rows.FECHA.toString().replace('T00:00:00.000Z','')}</td>
+                                <td>
+                                    ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                                </td>
+                                <td>${rows.NOMCLIE}
+                                    <br>
+                                    <small>${rows.DIRCLIE + ',' + rows.DESMUNI}</small>
+                                </td>
+                                <td>
+                                    ${funciones.setMoneda(rows.IMPORTE,'Q')}
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetallePedido('${f}','${rows.CODDOC}','${rows.CORRELATIVO}')">
+                                        +
+                                    </button>
+                                </td>
+                            </tr>`
+            })
+            container.innerHTML = strdata;
+            lbTotal.innerText = `${funciones.setMoneda(total,'Q ')} - Peds:${totalpedidos} - Prom:${funciones.setMoneda((Number(total)/Number(totalpedidos)),'Q')}`;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
+           
+    },
+    digitadorDetallePedido: async(fecha,coddoc,correlativo,idContenedor,idLbTotal)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+        
+        let strdata = '';
+
+        axios.post('/digitacion/detallepedido', {
+            sucursal: GlobalCodSucursal,
+            fecha:fecha,
+            coddoc:coddoc,
+            correlativo:correlativo
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.IMPORTE);
+                    strdata = strdata + `
+                            <tr>
+                                <td>${rows.DESPROD}
+                                    <br>
+                                    <small class="text-danger">${rows.CODPROD}</small>
+                                </td>
+                                <td>${rows.CODMEDIDA}</td>
+                                <td>${rows.CANTIDAD}</td>
+                                <td>${rows.PRECIO}</td>
+                                <td>${rows.IMPORTE}</td>
+                            </tr>
+                            `
+            })
+            container.innerHTML = strdata;
+            lbTotal.innerText = `${funciones.setMoneda(total,'Q')}`;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q0.00';
+        });
+           
     }
 }

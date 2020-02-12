@@ -18,35 +18,28 @@ let classNavegar = {
         divUsuario.innerText = GlobalUsuario;
         lbTipo.innerText = GlobalTipoUsuario;
 
-
         switch (tipousuario) {
             case 'VENDEDOR':
                 classNavegar.inicioVendedor();
                 break;
 
             case 'SUPERVISOR':
-                funciones.loadScript('../views/inicio/supevisor.js','root')
-                .then(()=>{
-                    GlobalSelectedForm='INICIO';
-                    InicializarVista();
-                })          
+                classNavegar.inicioSupervisor();
+                break;
+            
+            case 'DIGITADOR':
+                classNavegar.inicioDigitador();
                 break;
             
             case 'REPARTIDOR':
-                funciones.loadScript('../views/inicio/repartidor.js','root')
-                .then(()=>{
-                    GlobalSelectedForm='INICIO';
-                    InicializarVista();
-                })          
+                classNavegar.inicioRepartidor();
                 break;
             case 'GERENTE':
-                    classNavegar.inicioGerente();                        
+                classNavegar.inicioGerente();                        
                 break;
             default:
                 break;
-
         };
-      
     },
     inicioVendedor : async ()=>{
         let strMenu =   `
@@ -136,6 +129,62 @@ let classNavegar = {
             GlobalSelectedForm='GERENTE';
             InicializarVistaGerente();
         })
+    },
+    inicioDigitador : ()=>{
+        console.log('inicio digitador');
+          let strMenu =   `
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorPendientes">
+                                <span>PEDIDOS PENDIENTES</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorTipoprecio">
+                                <span>PEDIDOS TIPO PRECIO</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorEmbarques">
+                                <span>EMBARQUES/PICKING</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorNoticias">
+                                <span>NOTICIAS</span>
+                            </a>
+                            `
+                rootMenu.innerHTML = strMenu;
+
+                funciones.loadScript('../views/digitador/inicio.js','root')
+                .then(()=>{
+                    GlobalSelectedForm='DIGITACION';
+                    iniciarVistaDigitador();
+                    
+                      // handlers del menu
+                    let btnMenuDigitadorPendientes = document.getElementById('btnMenuDigitadorPendientes');
+                    btnMenuDigitadorPendientes.addEventListener('click',()=>{
+                        classNavegar.inicioDigitador();
+                    });
+                    let btnMenuDigitadorTipoprecio = document.getElementById('btnMenuDigitadorTipoprecio');
+                    btnMenuDigitadorTipoprecio.addEventListener('click',()=>{
+                        
+                    });
+                    let btnMenuDigitadorEmbarques = document.getElementById('btnMenuDigitadorEmbarques');
+                    btnMenuDigitadorEmbarques.addEventListener('click',()=>{
+                        
+                    });
+                    let btnMenuDigitadorNoticias = document.getElementById('btnMenuDigitadorNoticias');
+                    btnMenuDigitadorNoticias.addEventListener('click',()=>{
+                        classNavegar.noticias();
+                    });
+                })            
+    },
+    inicioRepartidor : ()=>{
+        funciones.loadScript('../views/inicio/repartidor.js','root')
+        .then(()=>{
+            GlobalSelectedForm='INICIO';
+            InicializarVista();
+        })          
+    },
+    inicioSupervisor : ()=>{
+        funciones.loadScript('../views/inicio/supevisor.js','root')
+                .then(()=>{
+                    GlobalSelectedForm='INICIO';
+                    InicializarVista();
+                })          
     },
     ventas: async(nit,nombre,direccion)=>{
         funciones.loadView('../views/facturacion/index.html','root')

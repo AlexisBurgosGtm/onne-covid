@@ -10,6 +10,8 @@ var routerTipoDocs = require('./router/routerTipoDocs');
 var routerEmpleados = require('./router/routerEmpleados');
 var routerClientes = require('./router/routerClientes');
 var routerProductos = require('./router/routerProductos');
+let routerDigitacion = require('./router/routerDigitacion');
+
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -61,6 +63,9 @@ app.use('/clientes', routerClientes);
 // Router para productos
 app.use('/productos', routerProductos);
 
+// Router para digitacion
+app.use('/digitacion', routerDigitacion);
+
 
 app.use("/",router);
 
@@ -78,6 +83,10 @@ io.on('connection', function(socket){
 
   socket.on('productos precio', function(msg,usuario){
 	  io.emit('productos precio', msg, usuario);
+  });
+
+  socket.on('productos bloqueado', function(msg,usuario){
+	  io.emit('productos bloqueado', msg, usuario);
   });
 
 
