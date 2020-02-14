@@ -273,7 +273,7 @@ router.post("/documentos", async (req,res)=>{
                 VALUES (
                 '${empnit}', ${anio}, ${mes}, '${coddoc}', '${correlativo}',
                 '', '${fecha}', '', '${nomclie}', '',
-                '${codbodega}', '${usuario}', 'I', ${totalcosto}, ${totalprecio},
+                '${codbodega}', '${usuario}', 'O', ${totalcosto}, ${totalprecio},
                 0, '${fecha}', 0, 'CON', 0,
                 0, 0, 0, ${totalprecio}, ${totalprecio},
                 '${nitclie}', 0, '${codven}', 0, 0, 
