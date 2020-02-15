@@ -37,7 +37,8 @@ let GlobalSelectedDirCliente;
 let GlobalSelectedCodprod;
 let GlobalSelectedDesprod;
 let GlobalSelectedStatus=0;
-
+let GlobalSelectedCoddoc = '';
+let GlobalSelectedCorrelativo = '';
 
 let GlobalSelectedApp = '';
 

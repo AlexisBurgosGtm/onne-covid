@@ -893,6 +893,9 @@ let api = {
         
         let strdata = '';
 
+        GlobalSelectedCoddoc = coddoc;
+        GlobalSelectedCorrelativo = correlativo;
+
         axios.post('/digitacion/detallepedido', {
             sucursal: GlobalCodSucursal,
             fecha:fecha,
@@ -926,5 +929,89 @@ let api = {
             lbTotal.innerText = 'Q0.00';
         });
            
+    },
+    digitadorPedidosTipoprecio: async(sucursal,codven,idContenedor)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+                
+        let strdata = '';
+     
+        axios.post('/digitacion/pedidostipoprecio', {
+            sucursal: sucursal,
+            codven:codven
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    strdata = strdata + `
+                            <tr>
+                                <td><b class="text-danger">${rows.CODDOC + '-' + rows.CORRELATIVO}<b>
+                                    <br>
+                                    <small>${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+                                </td>
+                                <td>${rows.DESPROD}
+                                    <br>
+                                    <small class="text-info">${rows.CODPROD}</small>
+                                </td>
+                                <td>${rows.CODMEDIDA}
+                                    <br>
+                                    TipoP:<b class="text-danger">${rows.TIPOPRECIO}</b>
+                                </td>
+                                <td>${rows.CANTIDAD}</td>
+                                <td>
+                                    <small>${funciones.setMoneda(rows.PRECIO,'Q')}</small>    
+                                </td>
+                                <td>
+                                    ${funciones.setMoneda(rows.TOTALPRECIO,'Q')}    
+                                </td>
+                            </tr>`
+            })
+            container.innerHTML = strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+           
+    },
+    digitadorBloquearPedido: async(sucursal,codven,coddoc,correlativo)=>{
+        
+        return new Promise((resolve,reject)=>{
+            axios.put('/digitacion/pedidobloquear',{
+                sucursal:sucursal,
+                coddoc:coddoc,
+                correlativo:correlativo,
+                codven:codven
+            })
+            .then((response) => {
+                
+               resolve();             
+            }, (error) => {
+                
+                reject();
+            });
+
+
+        })
+    },
+    digitadorConfirmarPedido: async(sucursal,codven,coddoc,correlativo)=>{
+        return new Promise((resolve,reject)=>{
+            axios.put('/digitacion/pedidoconfirmar',{
+                sucursal:sucursal,
+                coddoc:coddoc,
+                correlativo:correlativo,
+                codven:codven
+            })
+            .then((response) => {
+                
+               resolve();             
+            }, (error) => {
+                
+                reject();
+            });
+
+        })
     }
 }

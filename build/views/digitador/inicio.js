@@ -64,20 +64,15 @@ function getView(){
                     </div>
 
                     <div class="col-7">
-                        <button class="btn btn-md btn-danger col-5">
-                                <i class="fal fa-globe"></i>
-                                Bloquear
+                        <button class="btn btn-md btn-danger col-5" id="btnPedidoBloquear">
+                            <i class="fal fa-globe"></i>
+                            Bloquear
                         </button>
-                        
-                        <button class="btn btn-md btn-success col-5">
-                                <i class="fal fa-bell"></i>
-                                Confirmar
+                        <button class="btn btn-md btn-success col-5" id="btnPedidoConfirmar">
+                            <i class="fal fa-bell"></i>
+                            Confirmar
                         </button>
                     </div>
-
-                    
-
-                    
 
                 </div>
                 <div class="table-responsive">
@@ -153,15 +148,55 @@ function addListeners(){
     //carga la lista
     api.comboVendedores(GlobalCodSucursal,'cmbVendedor')
     .then(()=>{
+
         api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal')
     });
 
     let btnCargarTipoPrecio = document.getElementById('btnCargarTipoPrecio');
     btnCargarTipoPrecio.addEventListener('click',()=>{
-       let tblTipoPrecio = document.getElementById('tblTipoPrecio');
        
-       
+       api.digitadorPedidosTipoprecio(GlobalCodSucursal,cmbVendedor.value,'tblTipoPrecio')
+  
         $("#modalTipoPrecio").modal('show');
+    });
+
+    let btnPedidoBloquear = document.getElementById('btnPedidoBloquear');
+    btnPedidoBloquear.addEventListener('click',()=>{
+        funciones.Confirmacion('¿Está seguro que desea Bloquear/Anular este Pedido?')
+        .then((value)=>{
+            if(value==true){
+                api.digitadorBloquearPedido(GlobalCodSucursal,cmbVendedor.value,GlobalSelectedCoddoc,GlobalSelectedCorrelativo)
+                .then(()=>{
+                    funciones.Aviso('Pedido BLOQUEADO exitosamente!!')
+                    api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal')
+                    $("#modalMenu").modal('hide');
+                })
+                .catch(()=>{
+                    funciones.AvisoError('No se pudo Bloquear :(')
+                })
+            }
+        })
+        
+    });
+
+    let btnPedidoConfirmar = document.getElementById('btnPedidoConfirmar');
+    btnPedidoConfirmar.addEventListener('click',()=>{
+        
+        funciones.Confirmacion('¿Está seguro que desea CONFIRMAR este Pedido?')
+        .then((value)=>{
+            if(value==true){
+                api.digitadorConfirmarPedido(GlobalCodSucursal,cmbVendedor.value,GlobalSelectedCoddoc,GlobalSelectedCorrelativo)
+                .then(()=>{
+                    funciones.Aviso('Pedido CONFIRMADO exitosamente!!')
+                    api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal')
+                    $("#modalMenu").modal('hide');
+                })
+                .catch(()=>{
+                    funciones.AvisoError('No se pudo CONFIRMAR :(')
+                })
+            }
+        })
+
     });
 
 

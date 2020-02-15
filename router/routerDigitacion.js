@@ -2,19 +2,38 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+router.put('/pedidobloquear', async(req,res)=>{
+    const {sucursal,codven,coddoc,correlativo} = req.body;
+
+    let qry = `UPDATE ME_DOCUMENTOS SET DOC_ESTATUS='A' WHERE CODSUCURSAL='${sucursal}' AND CODVEN=${codven} AND CODDOC='${coddoc}' AND DOC_NUMERO='${correlativo}'`;
+    console.log(qry);
+    execute.Query(res,qry);
+
+});
+
+router.put('/pedidoconfirmar', async(req,res)=>{
+    const {sucursal,codven,coddoc,correlativo} = req.body;
+
+    let qry = `UPDATE ME_DOCUMENTOS SET DOC_ESTATUS='I' WHERE CODSUCURSAL='${sucursal}' AND CODVEN=${codven} AND CODDOC='${coddoc}' AND DOC_NUMERO='${correlativo}'`;
+
+    console.log(qry);
+
+    execute.Query(res,qry);
+
+});
 
 router.post("/pedidostipoprecio", async(req,res)=>{
     const {sucursal,codven}  = req.body;
     
     let qry = '';
-    qry = `SELECT ME_Documentos.CODDOC, ME_Documentos.DOC_NUMERO AS CORELATIVO, ME_Documentos.DOC_FECHA AS FECHA, ME_Documentos.CODVEN, ME_Documentos.CODSUCURSAL, ME_Docproductos.CODPROD, 
+    qry = `SELECT ME_Documentos.CODDOC, ME_Documentos.DOC_NUMERO AS CORRELATIVO, ME_Documentos.DOC_FECHA AS FECHA, ME_Documentos.CODVEN, ME_Documentos.CODSUCURSAL, ME_Docproductos.CODPROD, 
             ME_Docproductos.DESCRIPCION AS DESPROD, ME_Docproductos.CODMEDIDA, ME_Docproductos.CANTIDAD, ME_Docproductos.PRECIO, ME_Docproductos.TOTALPRECIO, ME_Docproductos.TIPOPRECIO
             FROM ME_Documentos LEFT OUTER JOIN
                 ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
                 ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT LEFT OUTER JOIN
                 ME_Docproductos ON ME_Documentos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Documentos.DOC_ANO = ME_Docproductos.DOC_ANO AND 
                 ME_Documentos.DOC_NUMERO = ME_Docproductos.DOC_NUMERO AND ME_Documentos.CODDOC = ME_Docproductos.CODDOC AND ME_Documentos.EMP_NIT = ME_Docproductos.EMP_NIT
-            WHERE (ME_Documentos.CODVEN = ${codven}) AND (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.DOC_ESTATUS = 'O')`
+            WHERE (ME_Documentos.CODVEN = ${codven}) AND (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.DOC_ESTATUS = 'O') AND (ME_Docproductos.TIPOPRECIO<>'P')`
 
     
     execute.Query(res,qry);
