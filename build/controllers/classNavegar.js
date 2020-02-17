@@ -136,9 +136,7 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorPendientes">
                                 <span>PEDIDOS PENDIENTES</span>
                             </a>
-                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorTipoprecio">
-                                <span>PEDIDOS TIPO PRECIO</span>
-                            </a>
+                            
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorEmbarques">
                                 <span>EMBARQUES/PICKING</span>
                             </a>
@@ -158,13 +156,10 @@ let classNavegar = {
                     btnMenuDigitadorPendientes.addEventListener('click',()=>{
                         classNavegar.inicioDigitador();
                     });
-                    let btnMenuDigitadorTipoprecio = document.getElementById('btnMenuDigitadorTipoprecio');
-                    btnMenuDigitadorTipoprecio.addEventListener('click',()=>{
-                        
-                    });
+                    
                     let btnMenuDigitadorEmbarques = document.getElementById('btnMenuDigitadorEmbarques');
                     btnMenuDigitadorEmbarques.addEventListener('click',()=>{
-                        
+                        classNavegar.digitadorEmbarques();                  
                     });
                     let btnMenuDigitadorNoticias = document.getElementById('btnMenuDigitadorNoticias');
                     btnMenuDigitadorNoticias.addEventListener('click',()=>{
@@ -241,6 +236,13 @@ let classNavegar = {
         .then(()=>{
             GlobalSelectedForm='GERENTEPRODUCTOS';
             inicializarVistaGerenteProductos();
+        })
+    },
+    digitadorEmbarques : ()=>{
+        funciones.loadScript('../views/digitador/embarques.js','root')
+        .then(()=>{
+            GlobalSelectedForm='DIGITADOREMBARQUES';
+            iniciarVistaEmbarques();
         })
     }
 }

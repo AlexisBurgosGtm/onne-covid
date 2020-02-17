@@ -866,6 +866,7 @@ let api = {
                                 <td>
                                     ${funciones.setMoneda(rows.IMPORTE,'Q')}
                                 </td>
+                                
                                 <td>
                                     <button class="btn btn-info btn-sm btn-circle" onclick="getDetallePedido('${f}','${rows.CODDOC}','${rows.CORRELATIVO}')">
                                         +
@@ -996,13 +997,14 @@ let api = {
 
         })
     },
-    digitadorConfirmarPedido: async(sucursal,codven,coddoc,correlativo)=>{
+    digitadorConfirmarPedido: async(sucursal,codven,coddoc,correlativo,embarque)=>{
         return new Promise((resolve,reject)=>{
             axios.put('/digitacion/pedidoconfirmar',{
                 sucursal:sucursal,
                 coddoc:coddoc,
                 correlativo:correlativo,
-                codven:codven
+                codven:codven,
+                embarque:embarque
             })
             .then((response) => {
                 
@@ -1013,5 +1015,146 @@ let api = {
             });
 
         })
+    },
+    digitadorComboEmbarques : async(idContainer)=>{
+        
+        let container = document.getElementById(idContainer);
+                
+        let strdata = '<option value="">NINGUNO</option>';
+
+        axios.post('/digitacion/embarquespendientes', {
+            sucursal: GlobalCodSucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                strdata = strdata + `
+                            <option value='${rows.CODEMBARQUE}'>
+                                ${rows.CODEMBARQUE}-${rows.RUTA}
+                            </option>
+                            `
+            })
+            container.innerHTML = strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = '';            
+        });
+    },
+    digitadorPicking : async(embarque,idContenedor,idLbTotal)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+        
+        let strdata = '';
+        let tblhead = `
+                <thead class="bg-trans-gradient text-white">
+                    <tr>
+                        <td>Vendedor</td>
+                        <td>Pedido</td>
+                        <td>Cliente</td>
+                        <td>Importe</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+        let totalpedidos = 0;
+        axios.post('/digitacion/pickingdocumentos', {
+            sucursal: GlobalCodSucursal,
+            embarque:embarque
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.TOTALPRECIO);
+                    totalpedidos = totalpedidos + 1;
+                    
+                    strdata = strdata + `
+                            <tr>
+                                <td>${rows.VENDEDOR}</td>
+                                <td>
+                                    ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                                    <br>
+                                    <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+                                </td>
+                                <td>${rows.CLIENTE}</td>
+                                <td>
+                                    <b>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</b>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-sm btn-circle" onclick="">
+                                        +
+                                    </button>
+                                </td>
+                            </tr>`
+            })
+            container.innerHTML = tblhead + strdata + '</tbody>';
+            lbTotal.innerText = `${funciones.setMoneda(total,'Q ')} - Peds:${totalpedidos} - Prom:${funciones.setMoneda((Number(total)/Number(totalpedidos)),'Q')}`;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
+    },
+    digitadorPickingProductos : async(embarque,idContenedor,idLbTotal)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+        
+        let strdata = '';
+        let tblhead = `
+                <thead class="bg-trans-gradient text-white">
+                    <tr>
+                        <td>Código</td>
+                        <td>Producto</td>
+                        <td>uxc</td>
+                        <td>Cajas</td>
+                        <td>Unidades</td>
+                        <td>Importe</td>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+        let totalpedidos = 0;
+        axios.post('/digitacion/pickingproductos', {
+            sucursal: GlobalCodSucursal,
+            embarque:embarque
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.TOTALPRECIO);
+                    totalpedidos = totalpedidos + 1;
+                    
+                    strdata = strdata + `
+                            <tr>
+                                <td>${rows.CODPROD}</td>
+                                <td>${rows.DESPROD}</td>
+                                <td>${rows.UXC}</td>
+                                <td>${Math.floor(rows.CAJAS)}</td>
+                                <td>${ Math.floor((Number(rows.CAJAS)- Math.floor(rows.CAJAS)) * Number(rows.UXC)) }</td>
+                                <td>
+                                    <b class="text-danger">${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</b>
+                                </td>
+                            </tr>`
+            })
+            container.innerHTML = tblhead + strdata + '</tbody>';
+            lbTotal.innerText = `${funciones.setMoneda(total,'Q ')} - Items:${totalpedidos}`;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
     }
 }

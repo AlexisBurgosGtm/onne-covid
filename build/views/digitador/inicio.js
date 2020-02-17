@@ -58,23 +58,25 @@ function getView(){
             <div class="card">
                 <br>
                 <div class="row">
-                    <div class="col-5">
-                        <label>Total Pedido : </label>
-                        <h3 class="text-danger" id="lbTotalDetallePedido"></h3>
+                    <div class="col-1"></div>
+                    <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                        <select class="form-control" id="cmbEmbarques">
+                        </select>
                     </div>
 
-                    <div class="col-7">
-                        <button class="btn btn-md btn-danger col-5" id="btnPedidoBloquear">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <button class="btn btn-md btn-danger" id="btnPedidoBloquear">
                             <i class="fal fa-globe"></i>
-                            Bloquear
+                            Bloquear_
                         </button>
-                        <button class="btn btn-md btn-success col-5" id="btnPedidoConfirmar">
+                        <button class="btn btn-md btn-success" id="btnPedidoConfirmar">
                             <i class="fal fa-bell"></i>
                             Confirmar
                         </button>
                     </div>
 
                 </div>
+                <br>
                 <div class="table-responsive">
                     <table class="table table-responsive table-hover table-striped table-bordered">
                         <thead class="bg-trans-gradient text-white">
@@ -87,7 +89,17 @@ function getView(){
                             </tr>
                         </thead>
                         <tbody id="tblDetallePedido"></tbody>
+                        
                     </table>
+                </div>
+                <br>
+                <div class="">
+                    <div class="col-1"></div>
+                    <div class="col-5">
+                        <label>Total Pedido : </label>
+                        <h2 class="text-danger" id="lbTotalDetallePedido"></h2>
+                    </div>
+                    
                 </div>
             </div>
             `
@@ -95,7 +107,7 @@ function getView(){
         listaTipoPrecio : ()=>{
             return `
         <div class="modal fade" id="modalTipoPrecio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <label class="modal-title text-danger h3" id="">Tipo de Precio en Pedidos</label>
@@ -137,7 +149,7 @@ function getView(){
     
 };
 
-function addListeners(){
+async function addListeners(){
     
     //agrega el listener del combo de vendedores
     let cmbVendedor = document.getElementById('cmbVendedor');
@@ -179,13 +191,15 @@ function addListeners(){
         
     });
 
+    let cmbEmbarques = document.getElementById('cmbEmbarques');
+
     let btnPedidoConfirmar = document.getElementById('btnPedidoConfirmar');
     btnPedidoConfirmar.addEventListener('click',()=>{
         
         funciones.Confirmacion('¿Está seguro que desea CONFIRMAR este Pedido?')
         .then((value)=>{
             if(value==true){
-                api.digitadorConfirmarPedido(GlobalCodSucursal,cmbVendedor.value,GlobalSelectedCoddoc,GlobalSelectedCorrelativo)
+                api.digitadorConfirmarPedido(GlobalCodSucursal,cmbVendedor.value,GlobalSelectedCoddoc,GlobalSelectedCorrelativo,cmbEmbarques.value)
                 .then(()=>{
                     funciones.Aviso('Pedido CONFIRMADO exitosamente!!')
                     api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal')
@@ -198,6 +212,9 @@ function addListeners(){
         })
 
     });
+
+    await api.digitadorComboEmbarques('cmbEmbarques');
+    
 
 
 };
