@@ -4,7 +4,7 @@ function getView(){
         encabezado : ()=>{
             let st = `
                 <div class="row">
-                    <div class="card col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="card col-12">
                         <div class="card-header">
                             <div class="form-group">
                                 <label>Seleccione un Embarque</label>
@@ -17,10 +17,16 @@ function getView(){
                         </div>
                         <div class="card-body">
                             <button class="btn btn-success" id="btnPickingDocumentos">
+                                <i class="fal fa-credit-card-front"></i>
                                 Documentos
                             </button>
                             <button class="btn btn-info" id="btnPickingProductos">
+                                <i class="fal fa-tag"></i>    
                                 Productos
+                            </button>
+                            <button class="btn btn-warning" onclick="window.print();">
+                                <i class="fal fa-print"></i>
+                                Imprimir
                             </button>
                         </div>
                     </div>
@@ -81,3 +87,15 @@ function iniciarVistaEmbarques(){
     getView();
     addListeners();
 };
+
+function QuitarPedidoPicking(coddoc,correlativo,codven){
+    funciones.Confirmacion('¿Está seguro que desea Regresar este pedido al listado del vendedor?')
+        .then((value)=>{
+            if(value==true){
+                api.digitadorQuitarPedidoPicking(coddoc,correlativo,codven)
+                .then(()=>{
+                    api.digitadorPicking(document.getElementById('cmbEmbarque').value,'tblPicking','lbTotalPicking')
+                })
+            }
+    })
+}

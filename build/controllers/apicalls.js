@@ -849,17 +849,23 @@ let api = {
         .then((response) => {
             const data = response.data.recordset;
             let total =0;
+            let strClassStatus = '';
+            let strClassRowSt = '';
             data.map((rows)=>{
+                    if(rows.ST=='A'){strClassStatus='bg-danger text-white'}else{strClassStatus='bg-info text-white'}
+                    if(rows.ST=='A'){strClassRowSt='bg-danger text-white'}else{strClassRowSt=''}
                     total = total + Number(rows.IMPORTE);
                     totalpedidos = totalpedidos + 1;
                     let f = rows.FECHA.toString().replace('T00:00:00.000Z','');
                     strdata = strdata + `
                             <tr>
-                                <td>${rows.FECHA.toString().replace('T00:00:00.000Z','')}</td>
+                                <td>${f}</td>
                                 <td>
                                     ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                                    <br>
+                                    <small class="${strClassStatus}">Status:${rows.ST}</small>
                                 </td>
-                                <td>${rows.NOMCLIE}
+                                <td class="${strClassRowSt}">${rows.NOMCLIE}
                                     <br>
                                     <small>${rows.DIRCLIE + ',' + rows.DESMUNI}</small>
                                 </td>
@@ -1087,8 +1093,8 @@ let api = {
                                     <b>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</b>
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-sm btn-circle" onclick="">
-                                        +
+                                    <button class="btn btn-danger btn-sm btn-circle" onclick="QuitarPedidoPicking('${rows.CODDOC}','${rows.CORRELATIVO}',${rows.CODVEN})">
+                                        x
                                     </button>
                                 </td>
                             </tr>`
@@ -1156,5 +1162,24 @@ let api = {
             container.innerHTML = '';
             lbTotal.innerText = 'Q 0.00';
         });
+    },
+    digitadorQuitarPedidoPicking : async (coddoc,correlativo,codven)=>{
+        
+                return new Promise((resolve,reject)=>{
+                    axios.put('/digitacion/pedidoregresar',{
+                        sucursal:GlobalCodSucursal,
+                        coddoc:coddoc,
+                        correlativo:correlativo,
+                        codven:codven
+                    })
+                    .then((response) => {
+                        
+                        resolve();             
+                    }, (error) => {
+                        
+                        reject();
+                    });
+        
+                })
     }
 }

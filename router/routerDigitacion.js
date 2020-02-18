@@ -11,6 +11,15 @@ router.put('/pedidobloquear', async(req,res)=>{
 
 });
 
+router.put('/pedidoregresar', async(req,res)=>{
+    const {sucursal,codven,coddoc,correlativo} = req.body;
+
+    let qry = `UPDATE ME_DOCUMENTOS SET DOC_ESTATUS='O', DOC_NUMORDEN='' WHERE CODSUCURSAL='${sucursal}' AND CODVEN=${codven} AND CODDOC='${coddoc}' AND DOC_NUMERO='${correlativo}'`;
+    
+    execute.Query(res,qry);
+
+});
+
 router.put('/pedidoconfirmar', async(req,res)=>{
     const {sucursal,codven,coddoc,correlativo,embarque} = req.body;
 
@@ -42,9 +51,9 @@ router.post("/pedidospendientes", async(req,res)=>{
     const {sucursal,codven}  = req.body;
     
     let qry = '';
-    qry = `SELECT DOC_FECHA AS FECHA, CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, DOC_TOTALVENTA AS IMPORTE, LAT, LONG, DOC_NUMORDEN AS EMBARQUE
+    qry = `SELECT DOC_FECHA AS FECHA, CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, DOC_TOTALVENTA AS IMPORTE, LAT, LONG, DOC_NUMORDEN AS EMBARQUE, DOC_ESTATUS AS ST
             FROM ME_Documentos
-            WHERE (CODSUCURSAL = '${sucursal}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS='O')
+            WHERE (CODSUCURSAL = '${sucursal}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'I')
             ORDER BY DOC_FECHA,DOC_NUMERO`
 
     
@@ -86,7 +95,7 @@ router.post('/pickingdocumentos',async (req,res)=>{
     const {sucursal,embarque} = req.body;
     
     let qry = `SELECT ME_Documentos.DOC_NUMORDEN AS EMBARQUE, ME_Vendedores.NOMVEN AS VENDEDOR, ME_Documentos.CODDOC, ME_Documentos.DOC_NUMERO AS CORRELATIVO, ME_Documentos.DOC_FECHA AS FECHA, 
-    ME_Documentos.DOC_NOMREF AS CLIENTE,ME_Documentos.DOC_TOTALCOSTO AS TOTALCOSTO, ME_Documentos.DOC_TOTALVENTA AS TOTALPRECIO
+    ME_Documentos.DOC_NOMREF AS CLIENTE,ME_Documentos.DOC_TOTALCOSTO AS TOTALCOSTO, ME_Documentos.DOC_TOTALVENTA AS TOTALPRECIO, ME_Documentos.CODVEN
     FROM ME_Documentos LEFT OUTER JOIN
     ME_Vendedores ON ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL AND ME_Documentos.EMP_NIT = ME_Vendedores.EMP_NIT AND ME_Documentos.CODVEN = ME_Vendedores.CODVEN LEFT OUTER JOIN
     ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
