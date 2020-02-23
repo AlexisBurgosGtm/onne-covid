@@ -53,13 +53,25 @@ router.post("/pedidospendientes", async(req,res)=>{
     let qry = '';
     qry = `SELECT DOC_FECHA AS FECHA, CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, DOC_TOTALVENTA AS IMPORTE, LAT, LONG, DOC_NUMORDEN AS EMBARQUE, DOC_ESTATUS AS ST
             FROM ME_Documentos
-            WHERE (CODSUCURSAL = '${sucursal}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'I')
+            WHERE (CODSUCURSAL = '${sucursal}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'I') AND (ISCENVIADO=0)
             ORDER BY DOC_FECHA,DOC_NUMERO`
 
     
     execute.Query(res,qry);
 });
 
+router.post("/pedidosgenerados", async(req,res)=>{
+    const {sucursal,codven}  = req.body;
+    
+    let qry = '';
+    qry = `SELECT DOC_FECHA AS FECHA, CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, DOC_TOTALVENTA AS IMPORTE, LAT, LONG, DOC_NUMORDEN AS EMBARQUE, DOC_ESTATUS AS ST
+            FROM ME_Documentos
+            WHERE (CODSUCURSAL = '${sucursal}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'I') AND (ISCENVIADO=1)
+            ORDER BY DOC_FECHA,DOC_NUMERO`
+
+    
+    execute.Query(res,qry);
+});
 
 router.post("/detallepedido", async(req,res)=>{
     const {sucursal,fecha,coddoc,correlativo}  = req.body;

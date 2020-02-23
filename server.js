@@ -11,7 +11,7 @@ var routerEmpleados = require('./router/routerEmpleados');
 var routerClientes = require('./router/routerClientes');
 var routerProductos = require('./router/routerProductos');
 let routerDigitacion = require('./router/routerDigitacion');
-
+let routerUsuarios = require('./router/routerUsuarios');
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -65,6 +65,9 @@ app.use('/productos', routerProductos);
 
 // Router para digitacion
 app.use('/digitacion', routerDigitacion);
+
+// Router para usuarios
+app.use('/usuarios', routerUsuarios);
 
 
 app.use("/",router);

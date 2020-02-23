@@ -1181,5 +1181,107 @@ let api = {
                     });
         
                 })
+    },
+    usuariosGetListado: (tipo,idContenedor)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let strdata = '';
+        
+        axios.post('/usuarios/listado', {
+            sucursal: GlobalCodSucursal,
+            tipo:tipo
+        })
+        .then((response) => {
+            const data = response.data.recordset;        
+            data.map((rows)=>{
+                    strdata = strdata + `
+                            <tr>
+                                <td>${rows.USUARIO}
+                                    <br>
+                                    <small>Codigo:${rows.CODIGO}</small>
+                                </td>
+                                <td>${rows.CLAVE}</td>
+                                <td>${rows.CODDOC}</td>
+                                <td>${rows.TELEFONO}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-circle btn-info"
+                                    onclick="editUser(${rows.ID},${rows.CODIGO},'${rows.USUARIO}','${rows.CLAVE}','${rows.CODDOC}','${rows.TELEFONO}');">
+                                    +
+                                    </button>
+                                </td>
+                            </tr>`
+            })
+            container.innerHTML = strdata;
+        
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            
+        });
+    },
+    usuariosNuevo:(codigo,usuario,clave,coddoc,telefono,tipo)=>{
+        
+        return new Promise((resolve,reject)=>{
+            axios.post('/usuarios/nuevo',{
+                sucursal:GlobalCodSucursal,
+                codusuario:codigo,
+                usuario:usuario,
+                clave:clave,
+                coddoc:coddoc,
+                telefono:telefono,
+                tipo:tipo
+            })
+            .then((response) => {
+                
+               resolve();             
+            }, (error) => {
+                
+                reject();
+            });
+        });
+
+    },
+    usuariosEditar:(codigo,usuario,clave,coddoc,telefono,tipo)=>{
+        
+        return new Promise((resolve,reject)=>{
+            axios.post('/usuarios/editar',{
+                sucursal:GlobalCodSucursal,
+                id:GlobalSelectedId,
+                codusuario:codigo,
+                usuario:usuario,
+                clave:clave,
+                coddoc:coddoc,
+                telefono:telefono,
+                tipo:tipo
+            })
+            .then((response) => {
+                
+               resolve();             
+            }, (error) => {
+                
+                reject();
+            });
+        });
+
+    },
+    usuariosEliminar:(id)=>{
+        
+        return new Promise((resolve,reject)=>{
+            axios.post('/usuarios/eliminar',{
+                sucursal:GlobalCodSucursal,
+                id:id
+            })
+            .then((response) => {
+                
+               resolve();             
+            }, (error) => {
+                
+                reject();
+            });
+        });
+
     }
 }

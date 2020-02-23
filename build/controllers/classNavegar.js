@@ -136,9 +136,11 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorPendientes">
                                 <span>PEDIDOS PENDIENTES</span>
                             </a>
-                            
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorEmbarques">
                                 <span>EMBARQUES/PICKING</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorUsuarios">
+                                <span>GESTION DE USUARIOS</span>
                             </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorNoticias">
                                 <span>NOTICIAS</span>
@@ -161,6 +163,12 @@ let classNavegar = {
                     btnMenuDigitadorEmbarques.addEventListener('click',()=>{
                         classNavegar.digitadorEmbarques();                  
                     });
+
+                    let btnMenuDigitadorUsuarios = document.getElementById('btnMenuDigitadorUsuarios');
+                    btnMenuDigitadorUsuarios.addEventListener('click',()=>{
+                        classNavegar.gerenteUsuarios('VENDEDOR');
+                    });
+
                     let btnMenuDigitadorNoticias = document.getElementById('btnMenuDigitadorNoticias');
                     btnMenuDigitadorNoticias.addEventListener('click',()=>{
                         classNavegar.noticias();
@@ -244,5 +252,12 @@ let classNavegar = {
             GlobalSelectedForm='DIGITADOREMBARQUES';
             iniciarVistaEmbarques();
         })
+    },
+    gerenteUsuarios:(tipo)=>{
+        funciones.loadScript('../views/usuarios/inicio.js','root')
+        .then(()=>{
+            GlobalSelectedForm='USUARIOS';
+            inicializarVistaUsuarios(tipo);
+        })          
     }
 }
