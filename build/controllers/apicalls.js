@@ -831,7 +831,7 @@ let api = {
         })
         
     },
-    digitadorPedidosVendedor: async(sucursal,codven,idContenedor,idLbTotal)=>{
+    digitadorPedidosVendedor: async(sucursal,codven,idContenedor,idLbTotal,st)=>{
 
         let container = document.getElementById(idContenedor);
         container.innerHTML = GlobalLoader;
@@ -841,7 +841,20 @@ let api = {
         
         let strdata = '';
         let totalpedidos = 0;
-        axios.post('/digitacion/pedidospendientes', {
+        let strApicall= '';
+
+        switch (st) {
+            case "O":
+                strApicall = '/digitacion/pedidospendientes';
+                break;
+            case "A":
+                strApicall = '/digitacion/pedidosbloqueados';
+                break;
+        
+            default:
+                break;
+        }
+        axios.post(strApicall, {
             app:GlobalSistema,
             sucursal: sucursal,
             codven:codven

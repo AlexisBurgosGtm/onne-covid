@@ -26,6 +26,12 @@ function getView(){
                         Tipo Precio
                     </button>
                 </div>
+                <div class="col-6">
+                    <select class="form-control" id="cmbStatus">
+                        <option value="O">Pendientes</option>
+                        <option value="A">Bloqueados</option>
+                    </select>
+                </div>
 
             </div>
             `
@@ -151,17 +157,23 @@ function getView(){
 
 async function addListeners(){
     
+    //tipo de lista
+    let cmbStatus = document.getElementById('cmbStatus');
+    cmbStatus.addEventListener('change',()=>{
+        api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal',cmbStatus.value)
+    });
+
     //agrega el listener del combo de vendedores
     let cmbVendedor = document.getElementById('cmbVendedor');
     cmbVendedor.addEventListener('change',()=>{
-        api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal')
+        api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal',cmbStatus.value)
     });
 
     //carga la lista
     api.comboVendedores(GlobalCodSucursal,'cmbVendedor')
     .then(()=>{
 
-        api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal')
+        api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal',cmbStatus.value)
     });
 
     let btnCargarTipoPrecio = document.getElementById('btnCargarTipoPrecio');
@@ -180,7 +192,7 @@ async function addListeners(){
                 api.digitadorBloquearPedido(GlobalCodSucursal,cmbVendedor.value,GlobalSelectedCoddoc,GlobalSelectedCorrelativo)
                 .then(()=>{
                     funciones.Aviso('Pedido BLOQUEADO exitosamente!!')
-                    api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal')
+                    api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal',cmbStatus.value)
                     $("#modalMenu").modal('hide');
                 })
                 .catch(()=>{
@@ -202,7 +214,7 @@ async function addListeners(){
                 api.digitadorConfirmarPedido(GlobalCodSucursal,cmbVendedor.value,GlobalSelectedCoddoc,GlobalSelectedCorrelativo,cmbEmbarques.value)
                 .then(()=>{
                     funciones.Aviso('Pedido CONFIRMADO exitosamente!!')
-                    api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal')
+                    api.digitadorPedidosVendedor(GlobalCodSucursal,cmbVendedor.value,'tblPedidos','lbTotal',cmbStatus.value)
                     $("#modalMenu").modal('hide');
                 })
                 .catch(()=>{
@@ -215,8 +227,6 @@ async function addListeners(){
 
     await api.digitadorComboEmbarques('cmbEmbarques');
     
-
-
 };
 
 function iniciarVistaDigitador(){
