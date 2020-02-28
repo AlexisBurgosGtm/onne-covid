@@ -928,7 +928,7 @@ let api = {
             data.map((rows)=>{
                     total = total + Number(rows.IMPORTE);
                     strdata = strdata + `
-                            <tr>
+                            <tr id='${rows.DOC_ITEM}'>
                                 <td>${rows.DESPROD}
                                     <br>
                                     <small class="text-danger">${rows.CODPROD}</small>
@@ -937,6 +937,17 @@ let api = {
                                 <td>${rows.CANTIDAD}</td>
                                 <td>${rows.PRECIO}</td>
                                 <td>${rows.IMPORTE}</td>
+                                <td>
+                                    <button class="btn btn-info btn-md btn-circle" onclick="getModalCantidad('${rows.DOC_ITEM}');">
+                                        +
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-md btn-circle"
+                                     onclick="deleteProductoPedido('${rows.DOC_ITEM}','${GlobalSelectedCoddoc}','${GlobalSelectedCorrelativo}',${rows.IMPORTE},${rows.TOTALCOSTO})">
+                                        x
+                                    </button>
+                                </td>
                             </tr>
                             `
             })
@@ -1016,6 +1027,33 @@ let api = {
 
         })
     },
+    digitadorQuitarRowPedido: async(item,coddoc,correlativo,totalprecio,totalcosto)=>{
+        console.log(item)
+        console.log(coddoc)
+        console.log(correlativo)
+        console.log(totalprecio)
+        console.log(totalcosto)
+
+        return new Promise((resolve,reject)=>{
+            axios.put('/digitacion/pedidoquitaritem',{
+                sucursal:GlobalCodSucursal,
+                coddoc:coddoc,
+                correlativo:correlativo,
+                item:item,
+                totalprecio:totalprecio,
+                totalcosto:totalcosto
+            })
+            .then((response) => {
+                
+               resolve();             
+            }, (error) => {
+                console.log(error);        
+                reject(error);
+            });
+
+
+        })
+    },
     digitadorConfirmarPedido: async(sucursal,codven,coddoc,correlativo,embarque)=>{
         return new Promise((resolve,reject)=>{
             axios.put('/digitacion/pedidoconfirmar',{
@@ -1039,7 +1077,7 @@ let api = {
         
         let container = document.getElementById(idContainer);
                 
-        let strdata = '<option value="">NINGUNO</option>';
+        let strdata = '<option value="">SELECCIONE EMBARQUE</option>';
 
         axios.post('/digitacion/embarquespendientes', {
             sucursal: GlobalCodSucursal

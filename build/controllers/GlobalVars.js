@@ -25,6 +25,7 @@ let GlobalSelectedForm = '';
 let map;
 let GlobalSelectedId;
 let GlobalSelectedCodigo;
+let GlobalSelectedFecha;
 let GlobalCoddoc = 'PED01';
 let GlobalTotalDocumento = 0;
 let GlobalTotalCostoDocumento = 0;
