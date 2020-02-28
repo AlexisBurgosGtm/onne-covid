@@ -460,7 +460,7 @@ let api = {
                                     </small>
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-circle btn-sm" onclick="">
+                                    <button class="btn btn-info btn-circle btn-sm" onclick="getGerenciaVendedorLogro(${rows.CODIGO},'${rows.NOMBRE}');">
                                         +
                                     </button>
                                 </td>
