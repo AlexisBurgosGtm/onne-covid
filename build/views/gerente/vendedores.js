@@ -2,11 +2,17 @@ function getView(){
     let view ={
         encabezado : ()=>{
             return `
-            <div class="row">
                 <div class="card col-12">                  
-                    <select id="cmbSucursal" class="form-control"></select>
-                </div>
-            </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-4 col-md-4 col-xl-4">
+                            <label>Seleccione una Sucursal</label>
+                            <select id="cmbSucursal" class="form-control"></select>
+                        </div>
+                        <div class="col-sm-12 col-lg-6 col-md-6 col-xl-6">
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                </div>            
             `
         },
         listado : ()=>{
@@ -67,22 +73,28 @@ function getView(){
 
                 <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                     <div class="row">
-                        <div class="col-4">                            
-                            <button class="btn btn-success btn-round" id="btnCargarDinero">
+                        <div class="col-3">                            
+                            <button class="btn btn-success btn-sm" id="btnCargarDinero">
                                 <i class="fal fa-tag"></i>
                                 Dinero
                             </button>
                         </div>
-                        <div class="col-4">
-                            <button class="btn btn-success btn-round" id="btnCargarProductos">
+                        <div class="col-3">
+                            <button class="btn btn-success btn-sm" id="btnCargarProductos">
                                 <i class="fal fa-cube"></i>
                                 Productos
                             </button>
                         </div>
-                        <div class="col-4">
-                            <button class="btn btn-success btn-round" id="btnCargarMarcas">
+                        <div class="col-3">
+                            <button class="btn btn-success btn-sm" id="btnCargarMarcas">
                                 <i class="fal fa-credit-card-front"></i>
                                 Marcas
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-success btn-sm" id="btnCargarLocaciones">
+                                <i class="fal fa-globe"></i>
+                                Recorrido
                             </button>
                         </div>
                     </div>
@@ -126,6 +138,8 @@ function addListeners(){
     cmbMes.value = f.getMonth()+1;
     cmbAnio.value = f.getFullYear();
 
+
+
     let btnCargarDinero = document.getElementById('btnCargarDinero');
     btnCargarDinero.addEventListener('click',()=>{
         getRptDinero(cmbMes.value, cmbAnio.value);
@@ -137,6 +151,10 @@ function addListeners(){
     let btnCargarMarcas = document.getElementById('btnCargarMarcas');
     btnCargarMarcas.addEventListener('click',()=>{
         getRptMarcas(cmbMes.value, cmbAnio.value);
+    });
+    let btnCargarLocaciones = document.getElementById('btnCargarLocaciones');
+    btnCargarLocaciones.addEventListener('click',()=>{
+        getRptLocaciones(cmbMes.value, cmbAnio.value);
     });
 
 };
@@ -169,7 +187,6 @@ function getGerenciaVendedorLogro(codigo,nombre){
 };
 
 
-
 // REPORTES DE LOGRO VENDEDOR
 function getRptDinero(mes,anio){
     api.reporteDinero(GlobalCodSucursal,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
@@ -180,3 +197,23 @@ function getRptProductos(mes,anio){
 function getRptMarcas(mes,anio){
     api.reporteMarcas(GlobalCodSucursal,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
 };
+function getRptLocaciones(mes,anio){
+    api.reporteLocaciones(GlobalCodSucursal,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
+}
+
+
+function Lmap(lat,long,nombre,importe){
+        //INICIALIZACION DEL MAPA            
+          var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          osm = L.tileLayer(osmUrl, {center: [lat, long],maxZoom: 20, attribution: osmAttrib});    
+          map = L.map('mapcontainer').setView([lat, long], 18).addLayer(osm);
+
+          L.marker([lat, long])
+            .addTo(map)
+            .bindPopup(nombre + ' - ' + importe)
+
+          return map;
+};
+
+

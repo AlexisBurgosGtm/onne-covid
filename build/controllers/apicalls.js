@@ -388,6 +388,50 @@ let api = {
         });
            
     },
+    reporteLocaciones: async(sucursal,codven,anio,mes,idContenedor,idLbTotal)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+
+        let tbl = `<div class="mapcontainer" id="mapcontainer"></div>`;        
+        
+        container.innerHTML = tbl;
+        
+        let mapcargado = 0;
+
+        axios.post('/ventas/reportelocaciones', {
+            app:GlobalSistema,
+            sucursal: sucursal,
+            codven:codven,
+            anio:anio,
+            mes:mes   
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                total = total + Number(rows.TOTALVENTA);
+                    if(mapcargado==0){
+                        map = Lmap(rows.LAT, rows.LONG, rows.CLIENTE, rows.TOTALVENTA);
+                        mapcargado = 1;
+                    }else{
+                        L.marker([rows.LAT, rows.LONG])
+                        .addTo(map)
+                        .bindPopup(rows.CLIENTE + ' - '  + rows.TOTALVENTA)   
+                    }
+            })
+            //container.innerHTML = tbl;
+            lbTotal.innerText = funciones.setMoneda(total,'Q ');
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
+           
+    },
     noticiaslistado : (sucursal,user,idContenedor)=>{
 
         let container = document.getElementById(idContenedor);
@@ -473,6 +517,25 @@ let api = {
             container.innerHTML = 'No se pudo cargar la lista';
         });
 
+
+        /*
+        
+        str = str + `<tr>
+                                <td>
+                                    ${rows.NOMBRE}<br>
+                                    <small>
+                                        Tel:<b class="text-danger">${rows.TELEFONO}</b> - 
+                                        Cod:${rows.CODIGO} - 
+                                        
+                                    </small>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-circle btn-sm" onclick="getGerenciaVendedorLogro(${rows.CODIGO},'${rows.NOMBRE}');">
+                                        +
+                                    </button>
+                                </td>
+                            </tr>`        
+        */
     },
     comboVendedores : (sucursal,idContainer)=>{
         let container = document.getElementById(idContainer);

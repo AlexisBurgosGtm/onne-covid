@@ -493,6 +493,25 @@ router.post('/reportemarcas',async(req,res)=>{
 
 });
 
+// reporte de locaciones por vendedor y mes
+router.post('/reportelocaciones',async(req,res)=>{
+
+    const {anio,mes,sucursal,codven} = req.body;
+
+    let qry = `
+    SELECT ME_Documentos.DOC_FECHA AS FECHA, ME_Documentos.DOC_NOMREF AS CLIENTE, COUNT(ME_Documentos.DOC_FECHA) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALVENTA, ME_Documentos.LAT, ME_Documentos.LONG
+    FROM ME_Documentos LEFT OUTER JOIN ME_Tipodocumentos ON ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+    WHERE (ME_Documentos.DOC_ANO = ${anio}) 
+            AND (ME_Documentos.DOC_MES = ${mes}) 
+            AND (ME_Documentos.CODVEN = ${codven}) 
+            AND (ME_Documentos.CODSUCURSAL = '${sucursal}') 
+            AND (ME_Tipodocumentos.TIPODOC = 'PED') 
+            AND (ME_Documentos.DOC_ESTATUS <> 'A')
+    GROUP BY ME_Documentos.DOC_FECHA, ME_Documentos.DOC_NOMREF, ME_Documentos.LAT, ME_Documentos.LONG`;
+
+    execute.Query(res,qry);
+
+});
 
 
 //******************************* */
