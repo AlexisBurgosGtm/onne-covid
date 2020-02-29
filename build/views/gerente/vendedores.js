@@ -23,19 +23,7 @@ function getView(){
                     <div class="card-header">
                         <h1>Seleccione un vendedor</h1>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-responsive table-striped table-hover table-bordered">
-                                <thead class=" bg-trans-gradient text-white">
-                                    <tr>
-                                        <td>Vendedor</td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                <tbody id="tblVendedores"></tbody>
-                            </table>
-                        </div>
-
+                    <div class="row" id="tblVendedores">
                         
                     </div>
                 </div>

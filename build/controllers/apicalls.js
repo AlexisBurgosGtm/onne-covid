@@ -484,7 +484,18 @@ let api = {
     tblVendedores : (sucursal,idContainer)=>{
         let container = document.getElementById(idContainer);
         container.innerHTML = GlobalLoader;
-
+        
+        let strHead = `<div class="table-responsive">
+                            <table class="table table-responsive table-striped table-hover table-bordered">
+                                <thead class=" bg-trans-gradient text-white">
+                                    <tr>
+                                        <td>Vendedor</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>`
         let str = '';
 
         axios.post('/empleados/vendedores', {
@@ -494,21 +505,30 @@ let api = {
         .then((response) => {
             const data = response.data.recordset;
             data.map((rows)=>{
-                str = str + `<tr>
-                                <td>
-                                    ${rows.NOMBRE}<br>
-                                    <small>
-                                        Tel:<b class="text-danger">${rows.TELEFONO}</b> - 
-                                        Cod:${rows.CODIGO} - 
-                                        
-                                    </small>
-                                </td>
-                                <td>
-                                    <button class="btn btn-info btn-circle btn-sm" onclick="getGerenciaVendedorLogro(${rows.CODIGO},'${rows.NOMBRE}');">
+                str = str + `
+                        <div class="card" style="width: 15rem;">
+                            <div class="card-header bg-warning text-center">
+                                <h5 class="text-center">${rows.NOMBRE}</h5>
+                            </div>        
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Teléfono:</label>
+                                            <h5 class="text-info">${rows.TELEFONO}</h5>        
+                                        </div>    
+                                    </div>
+                                    <div class="col-6" align="right">
+                                        <button class="btn btn-info btn-circle btn-lg" onclick="getGerenciaVendedorLogro(${rows.CODIGO},'${rows.NOMBRE}');">
                                         +
-                                    </button>
-                                </td>
-                            </tr>`        
+                                        </button>    
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                            
+                        </div>`        
             })
             container.innerHTML = str;
 
@@ -519,7 +539,6 @@ let api = {
 
 
         /*
-        
         str = str + `<tr>
                                 <td>
                                     ${rows.NOMBRE}<br>
