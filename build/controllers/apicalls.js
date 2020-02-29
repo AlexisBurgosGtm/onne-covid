@@ -121,7 +121,8 @@ let api = {
                                     ${funciones.setMoneda(rows.IMPORTE,'Q')}
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-sm btn-circle">
+                                    <button class="btn btn-info btn-sm btn-circle"
+                                    onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
                                         +
                                     </button>
                                 </td>
@@ -503,10 +504,11 @@ let api = {
             user:GlobalUsuario
         })
         .then((response) => {
+            //style="width: 15rem;"
             const data = response.data.recordset;
             data.map((rows)=>{
                 str = str + `
-                        <div class="card" style="width: 15rem;">
+                        <div class="card col-sm-12 col-md-3 col-lg-3 col-xl-3" >
                             <div class="card-header bg-warning text-center">
                                 <h5 class="text-center">${rows.NOMBRE}</h5>
                             </div>        
