@@ -6,55 +6,44 @@ const staticAssets = [
   './favicon.png',
   './index.html',
    './sw.js',
-   './controllers/*',
-   './css/*',
-   './img/*',
-   './js/*',
-   './libs',
-   './libs/*',
-   './libs/leaflet',
-   './libs/leaflet/*',
-   './libs/leaflet/images/*',
-   './models/*',
-   './vendor',
-   './views/*',
 ];
 
 self.addEventListener('install', function(evt) {
-  //console.log('Service worker instalado');
-  /*evt.waitUntil(caches.open(CACHE).then(function (cache) {
+  console.log('Service worker instalado');
+  evt.waitUntil(caches.open(CACHE).then(function (cache) {
     cache.addAll(staticAssets);
-  }));*/
-  evt.waitUntil(
-		caches.open(CACHE).then(cache => {
-			return cache.addAll([
-        './',
-        './manifest.json',
-        './favicon.png',
-        './index.html',
-         './sw.js',
-         './controllers/*',
-         './css/*',
-         './img/*',
-         './js/*',
-         './libs',
-         './libs/*',
-         './libs/leaflet',
-         './libs/leaflet/*',
-         './libs/leaflet/images/*',
-         './models/*',
-         './vendor',
-         './views/*',
-      ])
-		})
-	);
+  }));
+  
+	
 });
 
+self.addEventListener('fetch', async event => {
+  event.respondWith(
+    caches.open(cacheName)
+      .then(cache => cache.match(event.request, {ignoreSearch: true}))
+      .then(response => {
+      return response || fetch(event.request);
+    })
+  );
+
+  await event.waitUntil(update(event.request));
+
+});
+
+/*
 self.addEventListener('fetch', function(evt) {
   let requestURL = new URL(evt.request.url);
   //console.log('host request: '+ requestURL.hostname);
-  console.log(evt.request);
-  
+  var req = evt.request.clone();
+  if(req.method=='GET'){
+    if(req.destination==''){}else{
+
+          evt.waitUntil(update(evt.request));
+          evt.respondWith(fromCache(evt.request));
+
+    }
+  }*/
+
   /*
   var req = evt.request.clone();
   if (navigator.onLine){
@@ -69,6 +58,7 @@ self.addEventListener('fetch', function(evt) {
     }
   }
   */
+
   
 });
 
