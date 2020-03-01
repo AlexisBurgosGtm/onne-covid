@@ -35,6 +35,11 @@ btnMenuInicioSalir.addEventListener('click',()=>{
     classNavegar.login();
 });
 
+// LISTENER DEL BOTON PARA CERRAR EL MODAL DEL MENU LATERAL
+let btnCerrarModalMenuLateral = document.getElementById('btnCerrarModalMenuLateral');
+btnCerrarModalMenuLateral.addEventListener('click',()=>{
+  $('#modalMenu').modal('hide');
+})
 
 classNavegar.login();
 

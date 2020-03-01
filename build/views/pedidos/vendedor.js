@@ -179,7 +179,7 @@ function getView(){
     };
 
     root.innerHTML = view.encabezado() + view.listado();
-    rootMenuLateral.innerHTML = view.modalDetallePedido();
+    rootMenuLateral.innerHTML = view.modalDetallePedido() + view.modalCantidad();
     lbMenuTitulo.innerText = "Detalle del Pedido"
 
 };

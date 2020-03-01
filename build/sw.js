@@ -53,7 +53,7 @@ self.addEventListener('install', function(evt) {
 self.addEventListener('fetch', function(evt) {
   let requestURL = new URL(evt.request.url);
   //console.log('host request: '+ requestURL.hostname);
-  //console.log(evt.request);
+  console.log(evt.request);
   
   /*
   var req = evt.request.clone();

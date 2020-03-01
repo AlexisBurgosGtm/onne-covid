@@ -388,7 +388,7 @@ router.post("/listapedidos", async(req,res)=>{
     let qry = '';
     qry = `SELECT CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, DOC_TOTALVENTA AS IMPORTE, DOC_FECHA AS FECHA, LAT, LONG
             FROM ME_Documentos
-            WHERE (CODSUCURSAL = '${sucursal}') AND (DOC_FECHA = '${fecha}') AND (CODVEN = ${codven})`
+            WHERE (CODSUCURSAL = '${sucursal}') AND (DOC_FECHA = '${fecha}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'A')`
 
     
     execute.Query(res,qry);
@@ -407,7 +407,7 @@ router.post('/reporteproductosdia', async(req,res)=>{
     ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
     ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT LEFT OUTER JOIN
     ME_Productos ON ME_Docproductos.CODPROD = ME_Productos.CODPROD AND ME_Docproductos.EMP_NIT = ME_Productos.EMP_NIT
-            WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_FECHA = '${fecha}') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.CODVEN = ${codven})
+            WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_FECHA = '${fecha}') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.DOC_ESTATUS<>'A')
             GROUP BY ME_Docproductos.CODPROD, ME_Productos.DESPROD`;
     
     execute.Query(res,qry);
