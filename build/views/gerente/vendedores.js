@@ -168,7 +168,8 @@ function getGerenciaVendedorLogro(codigo,nombre){
     cmbMes.value = f.getMonth()+1;
     cmbAnio.value = f.getFullYear();
 
-    api.reporteDinero(GlobalCodSucursal,GlobalSelectedId,cmbAnio.value,cmbMes.value,'tblReport','lbTotal');
+    let cmbSucursal = document.getElementById('cmbSucursal');
+    api.reporteDinero(cmbSucursal.value,GlobalSelectedId,cmbAnio.value,cmbMes.value,'tblReport','lbTotal');
 
     $("#modalMenu").modal('show');
     
