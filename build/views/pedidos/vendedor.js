@@ -217,7 +217,7 @@ function inicializarVistaPedidos(){
 };
 
 
-function getDetallePedido(fecha,coddoc,correlativo){
+function getDetallePedido(fecha,coddoc,correlativo,obs){
     GlobalSelectedFecha = fecha;
     lbMenuTitulo.innerText = `Pedido: ${coddoc}-${correlativo}`;
     api.digitadorDetallePedido(fecha,coddoc,correlativo,'tblDetallePedido','lbTotalDetallePedido')

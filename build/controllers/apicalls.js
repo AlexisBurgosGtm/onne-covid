@@ -116,13 +116,15 @@ let api = {
                                 <td>${rows.NOMCLIE}
                                     <br>
                                     <small>${rows.DIRCLIE + ', ' + rows.DESMUNI}</small>
+                                    <br>
+                                    <small class="text-white bg-secondary">${rows.OBS}</small>
                                 </td>
                                 <td>
                                     ${funciones.setMoneda(rows.IMPORTE,'Q')}
                                 </td>
                                 <td>
                                     <button class="btn btn-info btn-sm btn-circle"
-                                    onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                    onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.OBS}');">
                                         +
                                     </button>
                                 </td>
@@ -965,13 +967,15 @@ let api = {
                                 <td class="${strClassRowSt}">${rows.NOMCLIE}
                                     <br>
                                     <small>${rows.DIRCLIE + ',' + rows.DESMUNI}</small>
+                                    <br>
+                                    <small class="text-white bg-secondary">${rows.OBS}</small>
                                 </td>
                                 <td>
                                     ${funciones.setMoneda(rows.IMPORTE,'Q')}
                                 </td>
                                 
                                 <td>
-                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetallePedido('${f}','${rows.CODDOC}','${rows.CORRELATIVO}')">
+                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetallePedido('${f}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.OBS}')">
                                         +
                                     </button>
                                 </td>

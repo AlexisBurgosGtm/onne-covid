@@ -386,7 +386,7 @@ router.post("/listapedidos", async(req,res)=>{
     const {sucursal,codven,fecha}  = req.body;
     
     let qry = '';
-    qry = `SELECT CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, DOC_TOTALVENTA AS IMPORTE, DOC_FECHA AS FECHA, LAT, LONG
+    qry = `SELECT CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, DOC_TOTALVENTA AS IMPORTE, DOC_FECHA AS FECHA, LAT, LONG, DOC_OBS AS OBS, DOC_MATSOLI AS DIRENTREGA
             FROM ME_Documentos
             WHERE (CODSUCURSAL = '${sucursal}') AND (DOC_FECHA = '${fecha}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'A')`
 
@@ -489,7 +489,10 @@ router.post('/reportemarcas',async(req,res)=>{
                              (ME_Documentos.CODSUCURSAL = '${sucursal}')
                 GROUP BY ME_Marcas.DESMARCA`;
 
+                
+
     execute.Query(res,qry);
+
 
 });
 

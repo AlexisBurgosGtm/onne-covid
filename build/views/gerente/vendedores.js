@@ -177,16 +177,20 @@ function getGerenciaVendedorLogro(codigo,nombre){
 
 // REPORTES DE LOGRO VENDEDOR
 function getRptDinero(mes,anio){
-    api.reporteDinero(GlobalCodSucursal,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
+    let cmbSucursal = document.getElementById('cmbSucursal');
+    api.reporteDinero(cmbSucursal.value,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
 };
 function getRptProductos(mes,anio){
-    api.reporteProductos(GlobalCodSucursal,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
+    let cmbSucursal = document.getElementById('cmbSucursal');
+    api.reporteProductos(cmbSucursal.value,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
 };
 function getRptMarcas(mes,anio){
-    api.reporteMarcas(GlobalCodSucursal,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
+    let cmbSucursal = document.getElementById('cmbSucursal');
+    api.reporteMarcas(cmbSucursal.value,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
 };
 function getRptLocaciones(mes,anio){
-    api.reporteLocaciones(GlobalCodSucursal,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
+    let cmbSucursal = document.getElementById('cmbSucursal');
+    api.reporteLocaciones(cmbSucursal.value,GlobalSelectedId,anio,mes,'tblReport','lbTotal');
 }
 
 
