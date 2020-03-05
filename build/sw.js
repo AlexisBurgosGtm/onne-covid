@@ -1,5 +1,5 @@
 
-var CACHE = 'mercadosefectivosv1';
+var CACHE = 'mercadosefectivosv2';
 const staticAssets = [
   './',
   './manifest.json',
@@ -18,6 +18,7 @@ self.addEventListener('install', function(evt) {
 });
 
 self.addEventListener('fetch', async event => {
+  /* 
   event.respondWith(
     caches.open(cacheName)
       .then(cache => cache.match(event.request, {ignoreSearch: true}))
@@ -27,7 +28,7 @@ self.addEventListener('fetch', async event => {
   );
 
   await event.waitUntil(update(event.request));
-
+*/
 });
 
 /*

@@ -194,6 +194,9 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorVendedores">
                                 <span>Vendedores</span>
                             </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorClientes">
+                                <span>Clientes</span>
+                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorPrecios">
                                 <span>Precios</span>
                             </a>
@@ -211,10 +214,14 @@ let classNavegar = {
                      btnMenuSupervisorVendedores.addEventListener('click',()=>{
                          classNavegar.inicioSupervisor();
                      });
+                     let btnMenuSupervisorClientes = document.getElementById('btnMenuSupervisorClientes');
+                     btnMenuSupervisorVendedores.addEventListener('click',()=>{
+                         //classNavegar.inicioSupervisor();
+                     });
                      
                      let btnMenuSupervisorPrecios = document.getElementById('btnMenuSupervisorPrecios');
                      btnMenuSupervisorPrecios.addEventListener('click',()=>{
-                        //classNavegar.gerenteProducto(); 
+                        classNavegar.supervisorPrecios(); 
                      });
                      let btnMenuSupervisorLogro = document.getElementById('btnMenuSupervisorLogro');
                      btnMenuSupervisorLogro.addEventListener('click',()=>{
@@ -230,6 +237,13 @@ let classNavegar = {
                     GlobalSelectedForm='SUPERVISORVENDEDOR';
                     InicializarVistaSupervisorVendedores();
                 })          
+    },
+    supervisorPrecios: ()=>{
+        funciones.loadScript('../views/supervisor/precios.js','root')
+        .then(()=>{
+            GlobalSelectedForm='SUPERVISORPRECIOS';
+            inicializarVistaPrecios();
+        })
     },
     ventas: async(nit,nombre,direccion)=>{
         funciones.loadView('../views/facturacion/index.html','root')

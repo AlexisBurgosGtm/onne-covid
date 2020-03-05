@@ -124,7 +124,7 @@ let api = {
                                 </td>
                                 <td>
                                     <button class="btn btn-info btn-sm btn-circle"
-                                    onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.OBS}');">
+                                    onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
                                         +
                                     </button>
                                 </td>
