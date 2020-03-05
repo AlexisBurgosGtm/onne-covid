@@ -96,6 +96,9 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteLogro">
                                 <span>Logros</span>
                             </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteUsuarios">
+                                <span>Usuarios</span>
+                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteNoticias">
                                 <span>Noticias</span>
                             </a>
@@ -115,6 +118,10 @@ let classNavegar = {
                     let btnMenuGerenteProductos = document.getElementById('btnMenuGerenteProductos');
                     btnMenuGerenteProductos.addEventListener('click',()=>{
                        classNavegar.gerenteProducto(); 
+                    });
+                    let btnMenuGerenteUsuarios = document.getElementById('btnMenuGerenteUsuarios');
+                    btnMenuGerenteUsuarios.addEventListener('click',()=>{
+                        
                     });
                     let btnMenuGerenteLogro = document.getElementById('btnMenuGerenteLogro');
                     btnMenuGerenteLogro.addEventListener('click',()=>{
@@ -183,10 +190,45 @@ let classNavegar = {
         })          
     },
     inicioSupervisor : ()=>{
-        funciones.loadScript('../views/inicio/supevisor.js','root')
+        let strMenu =  `
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorVendedores">
+                                <span>Vendedores</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorPrecios">
+                                <span>Precios</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorLogro">
+                                <span>Logros</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorNoticias">
+                                <span>Noticias</span>
+                            </a>
+                            `
+                    rootMenu.innerHTML = strMenu;
+
+                     // handlers del menu
+                     let btnMenuSupervisorVendedores = document.getElementById('btnMenuSupervisorVendedores');
+                     btnMenuSupervisorVendedores.addEventListener('click',()=>{
+                         classNavegar.inicioSupervisor();
+                     });
+                     
+                     let btnMenuSupervisorPrecios = document.getElementById('btnMenuSupervisorPrecios');
+                     btnMenuSupervisorPrecios.addEventListener('click',()=>{
+                        //classNavegar.gerenteProducto(); 
+                     });
+                     let btnMenuSupervisorLogro = document.getElementById('btnMenuSupervisorLogro');
+                     btnMenuSupervisorLogro.addEventListener('click',()=>{
+                         
+                     });
+                     let btnMenuSupervisorNoticias = document.getElementById('btnMenuSupervisorNoticias');
+                     btnMenuSupervisorNoticias.addEventListener('click',()=>{
+                        classNavegar.noticias();     
+                     });
+
+        funciones.loadScript('../views/supervisor/vendedores.js','root')
                 .then(()=>{
-                    GlobalSelectedForm='INICIO';
-                    InicializarVista();
+                    GlobalSelectedForm='SUPERVISORVENDEDOR';
+                    InicializarVistaSupervisorVendedores();
                 })          
     },
     ventas: async(nit,nombre,direccion)=>{

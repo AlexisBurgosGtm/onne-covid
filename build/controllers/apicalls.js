@@ -511,7 +511,7 @@ let api = {
             data.map((rows)=>{
                 str = str + `
                         <div class="card col-sm-12 col-md-3 col-lg-3 col-xl-3" >
-                            <div class="card-header bg-warning text-center">
+                            <div class="card-header bg-trans-gradient text-white text-center">
                                 <h5 class="text-center">${rows.NOMBRE}</h5>
                             </div>        
                             <div class="card-body">
@@ -519,7 +519,9 @@ let api = {
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Teléfono:</label>
-                                            <h5 class="text-info">${rows.TELEFONO}</h5>        
+                                            <h5 class="text-info">
+                                                <a href="https://api.whatsapp.com/send?phone=502${rows.TELEFONO}&text=${rows.NOMBRE.replace(' ','%20')}" target="blank">${rows.TELEFONO}</a>
+                                            </h5>        
                                         </div>    
                                     </div>
                                     <div class="col-6" align="right">
@@ -975,7 +977,7 @@ let api = {
                                 </td>
                                 
                                 <td>
-                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetallePedido('${f}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.OBS}')">
+                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetallePedido('${f}','${rows.CODDOC}','${rows.CORRELATIVO}')">
                                         +
                                     </button>
                                 </td>
