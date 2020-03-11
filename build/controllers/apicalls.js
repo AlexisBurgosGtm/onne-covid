@@ -1,4 +1,42 @@
 let api = {
+    coronavirus :(idContenedor)=>{
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let strdata = '';
+        let tblheader = `<table class="table table-responsive table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <td>País</td>
+                                <td>Infectados</td>
+                                <td>Muertes</td>
+                                <td>Recuperados</td>
+                                <td>Críticos</td>
+                            </tr>
+                        </thead><tbody>`;
+        let tblfooter = `</tbody></table>`
+
+        axios.get('https://corona.lmao.ninja/countries')
+        .then((response) => {
+            const data = response.data.recordset;
+            
+            data.map((rows)=>{
+                
+                    strdata = strdata + `<tr>
+                                <td>${rows.contry}</td>
+                                <td>${rows.cases}</td>
+                                <td>${rows.deaths}</td>
+                                <td>${rows.recovered}</td>
+                                <td>${rows.critical}</td>
+                            </tr>`
+            })
+            container.innerHTML = tblheader + strdata + tblfooter;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+        });
+        
+    },
     empleadosLogin : (sucursal,user,pass)=>{
 
         axios.post('/empleados/login', {
@@ -9,25 +47,27 @@ let api = {
         })
         .then((response) => {
             const data = response.data.recordset;
-            data.map((rows)=>{
-                if(rows.USUARIO==user){
-                    GlobalCodUsuario = rows.CODIGO;
-                    GlobalUsuario = rows.USUARIO;
-                    GlobalTipoUsuario = rows.TIPO;
-                    GlobalCoddoc= rows.CODDOC;
-                    GlobalCodSucursal = sucursal;
-                    GlobalSistema = sucursal;
-                    
-                    classNavegar.inicio(GlobalTipoUsuario);
-                    
-                }else{
-                    GlobalCodUsuario = 9999
-                    GlobalUsuario = '';
-                    GlobalTipoUsuario = '';
-                    GlobalCoddoc= '';
-                    funciones.AvisoError('Usuario o Contraseña incorrectos')
-                }        
-            })
+            if(response.data.rowsAffected[0]==1){
+                data.map((rows)=>{
+                    if(rows.USUARIO==user){
+                        GlobalCodUsuario = rows.CODIGO;
+                        GlobalUsuario = rows.USUARIO;
+                        GlobalTipoUsuario = rows.TIPO;
+                        GlobalCoddoc= rows.CODDOC;
+                        GlobalCodSucursal = sucursal;
+                        GlobalSistema = sucursal;
+                        
+                        classNavegar.inicio(GlobalTipoUsuario);        
+                    }        
+                })
+            }else{
+                GlobalCodUsuario = 9999
+                GlobalUsuario = '';
+                GlobalTipoUsuario = '';
+                GlobalCoddoc= '';
+                funciones.AvisoError('Usuario o Contraseña incorrectos, intente seleccionando la sucursal a la que pertenece')
+            }
+            
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
         });
@@ -588,6 +628,94 @@ let api = {
                 reject();
             });
         })
+    },
+    clientesListadoVendedor:(sucursal, codven, idContainer)=>{
+        let container = document.getElementById(idContainer);
+        container.innerHTML = GlobalLoader;
+        
+        
+        let strdata = '';
+        let tbl = `<table class="table table-hover table-striped" id="tblClientesVendedor">
+                    <thead  class="bg-trans-gradient text-white"> 
+                        <tr>
+                            <td>Cliente</td>
+                            <td>Dirección</td>
+                            <td>Telefono</td>
+                            <td>Visita</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+        let tblfoot = `</tbody></table>`;
+
+        axios.post('/clientes/clientesvendedor', {
+            sucursal: sucursal,
+            codven:codven
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            
+            data.map((rows)=>{
+                    let strClass = '';
+                    if(rows.ACTIVO==1){strClass='bg-danger text-white'}else{strClass=''};
+                    strdata = strdata + `<tr class="${strClass}">
+                                            <td>${rows.NOMCLIE}
+                                                <br>
+                                                <small>Código:<b>${rows.CODIGO}</b>  NIT:<b>${rows.NIT}</b></small>
+                                            </td>
+                                            <td>${rows.DIRCLIE}
+                                                <br>
+                                                <small>${rows.DESMUNI},${rows.DESDEPTO}</small>
+                                            </td>
+                                            <td>${rows.TELEFONO}</td>
+                                            <td>${rows.VISITA}</td>
+                                            
+                                            <td>
+                                                <button class="btn btn-md btn-circle btn-info" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.VISITA}','${rows.CODVEN}','${rows.ACTIVO}');">+</button>
+                                            </td>
+                                        </tr>`
+            })
+            container.innerHTML = tbl + strdata + tblfoot;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+
+    },
+    clientesListadoDesactivar : (sucursal,nitclie)=>{
+        return new Promise((resolve,reject)=>{
+            axios.put('/clientes/desactivar',{
+                sucursal:sucursal,
+                nitclie:nitclie
+            })
+            .then((response) => {
+                
+               resolve(response);             
+            }, (error) => {
+                
+                reject(error);
+            });
+        });
+
+    },
+    clientesListadoActivar : (sucursal,nitclie)=>{
+        return new Promise((resolve,reject)=>{
+            axios.put('/clientes/reactivar',{
+                sucursal:sucursal,
+                nitclie:nitclie
+            })
+            .then((response) => {
+                
+               resolve(response);             
+            }, (error) => {
+                
+                reject(error);
+            });
+        });
+
     },
     gerenciaResumenSucursal: (mes,anio,idContenedor,idLbTotal)=>{
         

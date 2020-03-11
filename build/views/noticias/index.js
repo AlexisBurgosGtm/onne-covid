@@ -10,7 +10,7 @@ function getView(){
         <div id="tblNoticias" class="card-deck"></div>
     </div>
     `
-    root.innerHTML = str;
+    root.innerHTML = '<div class="row" id="tblCoronavirus"></div>' //str;
 };
 
 function addListeners(){
@@ -19,6 +19,8 @@ function addListeners(){
 
 function inicializarVistaNoticias(){
     getView();
+    
+    api.coronavirus('tblCoronavirus');
 
-    api.noticiaslistado(GlobalCodSucursal,GlobalUsuario,'tblNoticias')
+    //api.noticiaslistado(GlobalCodSucursal,GlobalUsuario,'tblNoticias')
 };

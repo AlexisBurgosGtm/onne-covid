@@ -10,7 +10,7 @@ socket.on('ordenes escribiendo', function(msg,form){
     funciones.NotificacionPersistent(msg,"Nueva Orden generada");
 });
 
-socket.one('noticias nueva', (msg,user)=>{
+socket.on('noticias nueva', (msg,user)=>{
     funciones.NotificacionPersistent(msg,'Noticias !!')
 })
 

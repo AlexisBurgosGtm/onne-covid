@@ -1,7 +1,10 @@
 let root = document.getElementById('root');
 let rootMenu = document.getElementById('rootMenu');
-let rootMenuLateral = document.getElementById('rootMenuLateral');
+
 let lbMenuTitulo = document.getElementById('lbMenuTitulo');
+let rootMenuLateral = document.getElementById('rootMenuLateral');
+const showMenuLateral =(titulo)=>{ $("#modalMenu").modal('show'); lbMenuTitulo.innerText = titulo;};
+const hideMenuLateral =()=>{ $("#modalMenu").modal('hide'); lbMenuTitulo.innerText = '';};
 
 let divUsuario = document.getElementById('divUsuario');
 let lbTipo = document.getElementById('lbTipo');

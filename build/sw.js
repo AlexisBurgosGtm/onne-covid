@@ -58,11 +58,9 @@ self.addEventListener('fetch', function(evt) {
       //evt.waitUntil(update(evt.request));
     }
   }
-  */
-
   
 });
-
+  */
 
 
 function fromCache(request) {

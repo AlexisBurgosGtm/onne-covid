@@ -87,7 +87,7 @@ router.get("/tempVentas", async(req,res)=>{
             ME_TEMP_VENTAS.TOTALPRECIO
                 FROM ME_TEMP_VENTAS 
             WHERE (ME_TEMP_VENTAS.EMPNIT = '${empnit}') AND (ME_TEMP_VENTAS.USUARIO = '${usuario}')
-            ORDER BY ME_TEMP_VENTAS.ID`
+            ORDER BY ME_TEMP_VENTAS.ID DESC`
 
        
     execute.Query(res,qry);
@@ -185,7 +185,7 @@ router.get("/buscarcliente", async(req,res)=>{
     
     let qry = '';
 
-    qry = `SELECT NITCLIE AS CODCLIENTE,NITFACTURA AS NIT,NOMCLIE AS NOMCLIENTE,DIRCLIE AS DIRCLIENTE,TIPOCLIE AS CATEGORIA FROM ME_CLIENTES WHERE EMP_NIT='${empnit}' AND NITCLIE='${nit}'`         
+    qry = `SELECT NITCLIE AS CODCLIENTE,NITFACTURA AS NIT,NOMCLIE AS NOMCLIENTE,DIRCLIE AS DIRCLIENTE,TIPOCLIE AS CATEGORIA FROM ME_CLIENTES WHERE EMP_NIT='${empnit}' AND NITCLIE='${nit}' AND CODCLIE=0`         
 
     execute.Query(res,qry);
 

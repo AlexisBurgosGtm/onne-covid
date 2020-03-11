@@ -149,6 +149,9 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorUsuarios">
                                 <span>GESTION DE USUARIOS</span>
                             </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorClientes">
+                                <span>GESTION DE CLIENTES</span>
+                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuDigitadorNoticias">
                                 <span>NOTICIAS</span>
                             </a>
@@ -174,6 +177,11 @@ let classNavegar = {
                     let btnMenuDigitadorUsuarios = document.getElementById('btnMenuDigitadorUsuarios');
                     btnMenuDigitadorUsuarios.addEventListener('click',()=>{
                         classNavegar.gerenteUsuarios('VENDEDOR');
+                    });
+
+                    let btnMenuDigitadorClientes = document.getElementById('btnMenuDigitadorClientes');
+                    btnMenuDigitadorClientes.addEventListener('click',()=>{
+                        classNavegar.supervisorClientes();
                     });
 
                     let btnMenuDigitadorNoticias = document.getElementById('btnMenuDigitadorNoticias');
@@ -215,8 +223,8 @@ let classNavegar = {
                          classNavegar.inicioSupervisor();
                      });
                      let btnMenuSupervisorClientes = document.getElementById('btnMenuSupervisorClientes');
-                     btnMenuSupervisorVendedores.addEventListener('click',()=>{
-                         //classNavegar.inicioSupervisor();
+                     btnMenuSupervisorClientes.addEventListener('click',()=>{
+                         classNavegar.supervisorClientes();
                      });
                      
                      let btnMenuSupervisorPrecios = document.getElementById('btnMenuSupervisorPrecios');
@@ -232,17 +240,27 @@ let classNavegar = {
                         classNavegar.noticias();     
                      });
 
+                     classNavegar.supervisorVendedores();
+    },
+    supervisorVendedores:()=>{
         funciones.loadScript('../views/supervisor/vendedores.js','root')
-                .then(()=>{
-                    GlobalSelectedForm='SUPERVISORVENDEDOR';
-                    InicializarVistaSupervisorVendedores();
-                })          
+        .then(()=>{
+            GlobalSelectedForm='SUPERVISORVENDEDOR';
+            InicializarVistaSupervisorVendedores();
+        });          
     },
     supervisorPrecios: ()=>{
         funciones.loadScript('../views/supervisor/precios.js','root')
         .then(()=>{
             GlobalSelectedForm='SUPERVISORPRECIOS';
             inicializarVistaPrecios();
+        })
+    },
+    supervisorClientes: ()=>{
+        funciones.loadScript('../views/supervisor/clientes.js','root')
+        .then(()=>{
+            GlobalSelectedForm='SUPERVISORCLIENTES';
+            inicializarVistaClientesSupervisor();
         })
     },
     ventas: async(nit,nombre,direccion)=>{
