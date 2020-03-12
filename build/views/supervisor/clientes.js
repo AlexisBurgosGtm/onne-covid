@@ -20,6 +20,11 @@ function getView(){
                             <select class="form-control" id="cmbListadoVendedor"></select>
                         </div>
                     </div>
+                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <div class="form-group">
+                            <select class="form-control" id="cmbListadoDia"></select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,6 +169,13 @@ async function addListeners(){
 
     })
     
+    let cmbListadoDia = document.getElementById('cmbListadoDia');
+    cmbListadoDia.innerHTML = '<option value="">TODOS</option>' + funciones.ComboSemana("LETRAS");
+    cmbListadoDia.addEventListener('change',()=>{
+        funciones.crearBusquedaTabla('tblClientesVendedor','cmbListadoDia');
+    });
+
+
     api.clientesListadoVendedor(GlobalCodSucursal,cmbListadoVendedor.value,'tblClientes');
 
     let txtFiltrarCliente = document.getElementById('txtFiltrarCliente');

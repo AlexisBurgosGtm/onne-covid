@@ -4,6 +4,18 @@ const router = express.Router();
 
 // PPUBLICO= PRECIO, PMAYOREOA=OFERTA,PMAYOREOB=ESCALA, PMAYOREOC=MAYORISTA
 
+// OBTIENE LISTADO DE PRECIOS
+router.post('/listaprecios',async(req,res)=>{
+    const {sucursal} = req.body;
+    let qry = `SELECT ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, ME_Precios.EQUIVALE, ME_Precios.COSTO, ME_Precios.PRECIO AS PUBLICO, ME_Precios.MAYORISTA AS MAYOREOC, 
+                ME_Precios.ESCALA AS MAYOREOB, ME_Precios.OFERTA AS MAYOREOA, ME_Productos.LASTUPDATE
+                FROM ME_Productos LEFT OUTER JOIN
+                ME_Precios ON ME_Productos.CODPROD = ME_Precios.CODPROD AND ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL AND ME_Productos.EMP_NIT = ME_Precios.EMP_NIT
+                WHERE (ME_Productos.CODSUCURSAL = 'GENERAL')`;
+
+    execute.Query(res,qry);
+});
+
 // OBTIENE LOS PRECIOS DE UN PRODUCTO
 router.post('/preciosproducto',async(req,res)=>{
 

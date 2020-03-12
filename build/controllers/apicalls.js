@@ -180,6 +180,60 @@ let api = {
         });
            
     },
+    preciosListado: async(sucursal,idContenedor)=>{
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let strdata = '';
+        let tbl = `     <table class="table table-responsive table-hover table-striped"  id="tblPrecios">
+                            <thead class="bg-trans-gradient text-white">
+                                <tr>
+                                    <td>Producto</td>
+                                    <td>Medida</td>
+                                    <td>Equivale</td>
+                                    <td>Público</td>
+                                    <td>Mayorista C</td>
+                                    <td>Mayorista B</td>
+                                    <td>Mayorista A</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>`;
+
+        let tblfoot = `</tbody></table>`;
+
+        axios.post('/productos/listaprecios', {
+            sucursal: sucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    
+                    strdata = strdata + `<tr>
+                                            <td>
+                                                ${rows.DESPROD}
+                                                <br>
+                                                <small><b>${rows.CODPROD}</b></small>
+                                            </td>
+                                            <td>${rows.CODMEDIDA}</td>
+                                            <td>${rows.EQUIVALE}</td>
+                                            <td>${funciones.setMoneda(rows.PUBLICO,'Q')}</td>
+                                            <td>${funciones.setMoneda(rows.MAYOREOC,'Q')}</td>
+                                            <td>${funciones.setMoneda(rows.MAYOREOB,'Q')}</td>
+                                            <td>${funciones.setMoneda(rows.MAYOREOA,'Q')}</td>
+                                        </tr>`
+            })
+            container.innerHTML = tbl + strdata + tblfoot;
+        
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+
+
+    },
     reporteDiaMarcas: async(sucursal,codven,fecha,idContenedor,idLbTotal)=>{
 
         let container = document.getElementById(idContenedor);

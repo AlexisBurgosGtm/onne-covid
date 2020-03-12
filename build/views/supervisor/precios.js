@@ -27,28 +27,11 @@ function getView(){
             return `
             <div class="row">
                 <div class="card col-12">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-responsive table-hover table-striped">
-                                
-                                <thead class="bg-trans-gradient">
-                                    <tr>
-                                        <td>Producto</td>
-                                        <td>Medida</td>
-                                        <td>Precio</td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody id="tblPrecios">
-                                </tbody>
-
-                            </div>
-                        </div>
-                    </div>
+                    <div class="table-responsive" id="containerListado">
+                        
+                    </div>       
                 </div>
-            </div>
-            `
+            </div>`
         }
     }
 
@@ -58,7 +41,12 @@ function getView(){
 
 function addListeners(){
 
-    
+    let txtBuscarProducto = document.getElementById('txtBuscarProducto');
+    txtBuscarProducto.addEventListener('keyup',()=>{
+        funciones.crearBusquedaTabla('tblPrecios','txtBuscarProducto');
+    });
+
+    api.preciosListado(GlobalCodSucursal,'containerListado');
 };
 
 function inicializarVistaPrecios(){
