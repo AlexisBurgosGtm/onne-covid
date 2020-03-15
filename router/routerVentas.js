@@ -200,8 +200,9 @@ router.post("/documentos", async (req,res)=>{
     let ncorrelativo = correlativo;
 
     //variables sin asignar
-    let concre = 'CON';
-    let abono = totalprecio; let saldo = 0;
+    let concre = 'CRE';
+    let abono = totalprecio; 
+    let saldo = totalprecio;
     let pagotarjeta = 0; let recargotarjeta = 0;
     let codrep = 0;
     let totalexento=0;
@@ -283,9 +284,9 @@ router.post("/documentos", async (req,res)=>{
                 '${empnit}', ${anio}, ${mes}, '${coddoc}', '${correlativo}',
                 '', '${fecha}', '', '${nomclie}', '',
                 '${codbodega}', '${usuario}', 'O', ${totalcosto}, ${totalprecio},
-                0, '${fecha}', 0, 'CON', 0,
+                0, '${fecha}', 0, '${concre}', 0,
                 0, 0, 0, ${totalprecio}, ${totalprecio},
-                '${nitclie}', 0, '${codven}', 0, 0, 
+                '${nitclie}', 0, '${codven}', 0, ${saldo}, 
                 0, '${nitclie}', 0, '', 1, 
                 0, 0, '', '', '${obs}',
                 0, 0, 0, 0, 

@@ -4,8 +4,14 @@ let api = {
         container.innerHTML = GlobalLoader;
         
         let strdata = '';
-        let tblheader = `<table class="table table-responsive table-hover table-striped">
-                        <thead>
+        let tblheader = `<div class="row">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="txtFiltrarCoronavirus" placeholder="Escriba para buscar su país...">
+                            </div>
+                            
+                        </div>
+                    <table class="table table-responsive table-hover table-striped table-bordered" id="tblCoronavirus">
+                        <thead class="bg-trans-gradient text-white">
                             <tr>
                                 <td>País</td>
                                 <td>Infectados</td>
@@ -16,14 +22,15 @@ let api = {
                         </thead><tbody>`;
         let tblfooter = `</tbody></table>`
 
-        axios.get('https://corona.lmao.ninja/countries')
+        axios.get('https://coronavirus-19-api.herokuapp.com/countries')
         .then((response) => {
-            const data = response.data.recordset;
+            console.log(response)
+            const data = response.data;
             
             data.map((rows)=>{
                 
                     strdata = strdata + `<tr>
-                                <td>${rows.contry}</td>
+                                <td>${rows.country}</td>
                                 <td>${rows.cases}</td>
                                 <td>${rows.deaths}</td>
                                 <td>${rows.recovered}</td>
@@ -31,10 +38,19 @@ let api = {
                             </tr>`
             })
             container.innerHTML = tblheader + strdata + tblfooter;
+
+            let txtFiltrarCoronavirus = document.getElementById('txtFiltrarCoronavirus');
+            txtFiltrarCoronavirus.addEventListener('keyup',()=>{
+                funciones.crearBusquedaTabla('tblCoronavirus','txtFiltrarCoronavirus');
+            });
+
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
             strdata = '';
         });
+
+        
+        
         
     },
     empleadosLogin : (sucursal,user,pass)=>{
