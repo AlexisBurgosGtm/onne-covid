@@ -42,17 +42,28 @@ function getView(){
         modalNuevo:()=>{
             return `
             <div class="modal fade" id="ModalNuevoCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <label class="modal-title">Datos del Cliente</label>
                         </div>
                         <div class="modal-body">
                             <div class="form">
-                                <div class="form-group">
-                                    <label>NIT:</label>
-                                    <input id="txtNit" class="form-control" type="text" placeholder="Escriba el NIT ...">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>NIT:</label>
+                                            <input id="txtNit" class="form-control" type="text" placeholder="Escriba el NIT ...">
+                                        </div>    
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Telefonos:</label>
+                                            <input id="txtTelefono"  maxlength="8" class="form-control" type="number" placeholder="Telefono cliente">
+                                        </div>
+                                    </div>
                                 </div>
+                                
                                 <div class="form-group">
                                     <label>Negocio/Establecimiento:</label>
                                     <input id="txtNegocio" class="form-control" type="text" placeholder="nombre del negocio">
@@ -65,45 +76,58 @@ function getView(){
                                     <label>Dirección:</label>
                                     <input id="txtDircliente" class="form-control" type="text" placeholder="Dirección cliente...">
                                 </div>
-                                <div class="form-group">
-                                    <label>Municipio:</label>
-                                    <select id="cmbMunicipio" class="form-control">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Municipio:</label>
+                                            <select id="cmbMunicipio" class="form-control">
+                                            </select>
+                                        </div>    
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Departamento:</label>
+                                            <select id="cmbDepartamento" class="form-control">
+                                            </select>
+                                        </div>    
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label>Vendedor:</label>
+                                            <select id="cmbVendedor" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label>Día de Visita:</label>
+                                            <select id="cmbDiaVisita" class="form-control">                                        
+                                            </select>
+                                        </div>    
+                                    </div>
+                                </div>
 
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Departamento:</label>
-                                    <select id="cmbDepartamento" class="form-control">
-
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Telefonos:</label>
-                                    <input id="txtTelefono" class="form-control" type="number" placeholder="Telefono cliente">
-                                </div>
-                                <div class="form-group">
-                                    <label>Vendedor:</label>
-                                    <select id="cmbVendedor" class="form-control">
-
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Día de Visita:</label>
-                                    <select id="cmbDiaVisita" class="form-control">
-                                        
-                                    </select>
-                                </div>
                                 <div class="form-group">
                                     <label>Observaciones:</label>
                                     <input id="txtObs" class="form-control" type="text" placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <label>Latitud:</label>
-                                    <h4 id="txtLatitud">0</h4>
-                                    <label>Longitud:</label>
-                                    <h4 id="txtLongitud">0</h4>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Latitud:</label>
+                                            <h4 id="txtLatitud">0</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Longitud:</label>
+                                            <h4 id="txtLongitud">0</h4>
+                                        </div>
+                                    </div>
                                 </div>
+                                
                                 <div class="form-group">
                                     <button id="btnCancelar" class="btn btn-default btn-lg btn-round" data-dismiss="modal">
                                         <i class="now-ui-icons ui-1_simple-remove"></i>
