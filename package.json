@@ -1,5 +1,5 @@
 {
-  "name": "mercadosefectivos",
+  "name": "covidtracker",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/AlexisBurgosGtm/onne-covid.git"
   },
   "author": "Alexis Burgos",
   "license": "ISC",

@@ -4,14 +4,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 
 const execute = require('./router/connection');
-var routerNoticias = require('./router/routerNoticias');
-var routerVentas = require('./router/routerVentas');
-var routerTipoDocs = require('./router/routerTipoDocs');
-var routerEmpleados = require('./router/routerEmpleados');
-var routerClientes = require('./router/routerClientes');
-var routerProductos = require('./router/routerProductos');
-let routerDigitacion = require('./router/routerDigitacion');
-let routerUsuarios = require('./router/routerUsuarios');
+var routerCovid = require('./router/routerCovid');
 
 /**
 var request = require("request");
@@ -23,7 +16,7 @@ var db = require("quick.db");
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-const PORT = process.env.PORT || 777;
+const PORT = process.env.PORT || 666;
 
 app.use(bodyParser.json());
 
@@ -80,28 +73,7 @@ app.get("/countriescoronavirus/", async function(req, res) {
 // COVID19
 
 //Router para app NOTICIAS
-app.use('/noticias', routerNoticias);
-
-//Router para app VENTAS
-app.use('/ventas', routerVentas);
-
-// Router para Tipodocumentos
-app.use('/tipodocumentos', routerTipoDocs);
-
-// Router para empleados o vendedores
-app.use('/empleados', routerEmpleados);
-
-// Router para clientes
-app.use('/clientes', routerClientes);
-
-// Router para productos
-app.use('/productos', routerProductos);
-
-// Router para digitacion
-app.use('/digitacion', routerDigitacion);
-
-// Router para usuarios
-app.use('/usuarios', routerUsuarios);
+app.use('/covid', routerCovid);
 
 
 app.use("/",router);
