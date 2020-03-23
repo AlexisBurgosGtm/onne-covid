@@ -1,5 +1,8 @@
 const GlobalLoader = '<h1>Cargando datos...</h1>'
 let map;
+
+let GlobalResultadoNit = false;
+
 function Lmap(lat,long,nombre,direccion,fecha){
     
     //INICIALIZACION DEL MAPA            
@@ -41,15 +44,18 @@ async function addListeners(){
   txtNit.addEventListener('keyup',(e)=>{
     funciones.GetDataNit('txtNit')
     .then((data)=>{
+      GlobalResultadoNit = data.resultado;
       lbNombreNit.innerText = data.descripcion;
     })
     .catch((err)=>{
+      GlobalResultadoNit = false;
       funciones.AvisoError(err);
     })
   })
 
   let btnNuevo = document.getElementById('btnNuevo');
   btnNuevo.addEventListener('click',()=>{
+    GlobalResultadoNit = false;
     cleanData();
     funciones.ObtenerUbicacion('lbLat','lbLong');
     $('#modalNuevoReporte').modal('show');
@@ -65,17 +71,21 @@ async function addListeners(){
     funciones.Confirmacion('¿Está seguro que desea enviar este reporte?')
     .then(async(value)=>{
       if(value==true){
+        if(GlobalResultadoNit==false){
+          postReport(txtNit.value,txtNombre.value,txtDireccion.value,cmbStatus.value,cmbMunicipio.value,cmbDepartamento.value,lbLat.innerText,lbLong.innerText,funciones.getFecha())
+          .then(async(data)=>{
+            await getData('tblReportes');
+            cleanData();
+            btnCancelar.click();    
+  
+          })
+          .catch((err)=>{
+            funciones.AvisoError('Lo siento, ocurrió un error y no pude publicar tu reporte')
+          })
+        }else{
+          funciones.AvisoError('Nit incorrecto, debe usar su número de nit para publicar.')
+        }
         
-        postReport(txtNit.value,txtNombre.value,txtDireccion.value,cmbStatus.value,cmbMunicipio.value,cmbDepartamento.value,lbLat.innerText,lbLong.innerText,funciones.getFecha())
-        .then(async(data)=>{
-          await getData('tblReportes');
-          cleanData();
-          btnCancelar.click();    
-
-        })
-        .catch((err)=>{
-          funciones.AvisoError('Lo siento, ocurrió un error y no pude publicar tu reporte')
-        })
         
       }
     })
