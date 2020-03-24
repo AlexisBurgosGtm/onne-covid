@@ -17,7 +17,7 @@ function Lmap(lat,long,nombre,direccion,fecha){
       var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       osm = L.tileLayer(osmUrl, {center: [lat, long],maxZoom: 20, attribution: osmAttrib});    
-      map = L.map('mapcontainer').setView([lat, long], 20).addLayer(osm);
+      map = L.map('mapcontainer').setView([lat, long], 8.5).addLayer(osm);
 
       L.marker([lat, long])
         .addTo(map)
