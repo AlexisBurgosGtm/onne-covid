@@ -93,15 +93,7 @@ async function addListeners(){
             funciones.AvisoError('Nit incorrecto, debe usar su número de nit para publicar.')
           }else{
             postReport(txtNit.value,txtNombre.value,txtDireccion.value,cmbStatus.value,cmbMunicipio.value,cmbDepartamento.value,lbLat.innerText,lbLong.innerText,funciones.getFecha())
-            .then(async(data)=>{
-              await getData('tblReportes');
-              cleanData();
-              btnCancelar.click();    
-    
-            })
-            .catch((err)=>{
-              funciones.AvisoError('Lo siento, ocurrió un error y no pude publicar tu reporte')
-            })  
+            
           }
           
         }else{
@@ -131,7 +123,7 @@ addListeners();
 
 
 async function postReport(nit,nombre,direccion,status,municipio,departamento,lat,long,fecha){
-  return new Promise((resolve,reject)=>{
+  
     axios.post('/covid/report',{
       nit:nit,
       nombre:nombre,
@@ -143,15 +135,21 @@ async function postReport(nit,nombre,direccion,status,municipio,departamento,lat
       longitud:long,
       fecha:fecha
     })
-    .then((response) => {
-        console.log(response);
-       resolve(response);             
+    .then(async(response) => {
+      if(response.data.rowsAffected[0]==1){
+        funciones.Aviso('Reporte publicado exitosamente!!')
+        await getData('tblReportes',"totalConfirmados","totalSospechosos");
+        btnCancelar.click();    
+        cleanData();
+        
+      }else{
+        funciones.AvisoError('Lo siento, ocurrió un error y no pude publicar tu reporte')
+      }
+       
     }, (error) => {
-        reject(error);
+      funciones.AvisoError('Lo siento, ocurrió un error y no pude publicar tu reporte')
     });
 
-
-})
 }
 
 async function getData(idContainer,idConfirmados,idSospechosos){
