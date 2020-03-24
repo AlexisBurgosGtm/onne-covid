@@ -1,3 +1,11 @@
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () =>
+ navigator.serviceWorker.register('../sw.js')
+  .then(registration => console.log('Service Worker registered'))
+  .catch(err => 'SW registration failed'));
+};
+
+
 const GlobalLoader = '<h1>Cargando datos...</h1>'
 let map;
 
@@ -8,8 +16,8 @@ function Lmap(lat,long,nombre,direccion,fecha){
     //INICIALIZACION DEL MAPA            
       var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      osm = L.tileLayer(osmUrl, {center: [lat, long],maxZoom: 10, attribution: osmAttrib});    
-      map = L.map('mapcontainer').setView([lat, long], 18).addLayer(osm);
+      osm = L.tileLayer(osmUrl, {center: [lat, long],maxZoom: 20, attribution: osmAttrib});    
+      map = L.map('mapcontainer').setView([lat, long], 20).addLayer(osm);
 
       L.marker([lat, long])
         .addTo(map)
@@ -22,7 +30,7 @@ function Lmap(lat,long,nombre,direccion,fecha){
 
 async function addListeners(){
   //inicializa el mapa con la ubicación del caso inicial
-  map = Lmap(14.700508321287574,-90.5552140907942,"Caso inicial","San Pedro Sacatepéquez",'2020/03/05');
+  map = Lmap(14.68855296094455,-90.64981941745408,"Caso inicial","San Pedro Sacatepéquez",'2020/03/05');
   /* funcion mientras armo el mapa inicial */
   map.on('click', function(e) {
     console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
@@ -44,6 +52,7 @@ async function addListeners(){
   txtNit.addEventListener('keyup',(e)=>{
     funciones.GetDataNit('txtNit')
     .then((data)=>{
+      console.log('promesa nit: ' + data)
       GlobalResultadoNit = data.resultado;
       lbNombreNit.innerText = data.descripcion;
     })
@@ -51,6 +60,14 @@ async function addListeners(){
       GlobalResultadoNit = false;
       funciones.AvisoError(err);
     })
+  })
+
+  let btnNuevoRep = document.getElementById('btnNuevoRep');
+  btnNuevoRep.addEventListener('click',()=>{
+    GlobalResultadoNit = false;
+    cleanData();
+    funciones.ObtenerUbicacion('lbLat','lbLong');
+    $('#modalNuevoReporte').modal('show');
   })
 
   let btnNuevo = document.getElementById('btnNuevo');
@@ -71,17 +88,22 @@ async function addListeners(){
     funciones.Confirmacion('¿Está seguro que desea enviar este reporte?')
     .then(async(value)=>{
       if(value==true){
-        if(GlobalResultadoNit==false){
-          postReport(txtNit.value,txtNombre.value,txtDireccion.value,cmbStatus.value,cmbMunicipio.value,cmbDepartamento.value,lbLat.innerText,lbLong.innerText,funciones.getFecha())
-          .then(async(data)=>{
-            await getData('tblReportes');
-            cleanData();
-            btnCancelar.click();    
-  
-          })
-          .catch((err)=>{
-            funciones.AvisoError('Lo siento, ocurrió un error y no pude publicar tu reporte')
-          })
+        if(GlobalResultadoNit==true){
+          if(txtNit.value =='CF'){
+            funciones.AvisoError('Nit incorrecto, debe usar su número de nit para publicar.')
+          }else{
+            postReport(txtNit.value,txtNombre.value,txtDireccion.value,cmbStatus.value,cmbMunicipio.value,cmbDepartamento.value,lbLat.innerText,lbLong.innerText,funciones.getFecha())
+            .then(async(data)=>{
+              await getData('tblReportes');
+              cleanData();
+              btnCancelar.click();    
+    
+            })
+            .catch((err)=>{
+              funciones.AvisoError('Lo siento, ocurrió un error y no pude publicar tu reporte')
+            })  
+          }
+          
         }else{
           funciones.AvisoError('Nit incorrecto, debe usar su número de nit para publicar.')
         }
@@ -147,7 +169,7 @@ async function getData(idContainer,idConfirmados,idSospechosos){
   axios.post('/covid/data')
   .then((response) => {
       const data = response.data.recordset;
-      let confirmados =0; let sospechosos = 0;
+      let confirmados =1; let sospechosos = 0;
       let classst = ''
       data.map((rows)=>{
           let fecha = rows.FECHA.toString().replace('T00:00:00.000Z','')
@@ -179,4 +201,4 @@ async function getData(idContainer,idConfirmados,idSospechosos){
       
   });
      
-}
+};

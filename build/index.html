@@ -13,7 +13,7 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.png" />
     <!-- Generated: 2019-04-04 16:55:45 +0200 -->
     <title>COVID19 Social Tracker</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -27,7 +27,10 @@
       });
     </script>
     -->
-
+    <!-- service worker -->
+    <meta name="application-name" content="COVID SOCIAL" />
+    <meta name="theme-color" content="#ffffff">
+    <link rel="manifest" href="manifest.json">
     <!-- Dashboard Core -->
     <link href="./assets/css/dashboard.css" rel="stylesheet" />
     
@@ -49,8 +52,8 @@
           <div class="container">
 
             <div class="d-flex">
-              <a class="header-brand" href="./index.html">
-                <img src="./assets/images/logo.png" class="header-brand-img" alt="tabler logo">
+              <a class="header-brand" href="#">
+                <img src="./favicon.png" class="header-brand-img" alt="tabler logo">Covid Social Tracker Guatemala
               </a>
               
               
@@ -275,7 +278,10 @@
       </div>
 
 
-
+      <!-- botón nuevo -->
+      <div id="fixed-btn2">
+        <button class="btn btn-success btn-circle btn-xl" id="btnNuevoRep">+</button>
+      </div>
       
       <footer class="footer">
         <div class="container">
